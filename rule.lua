@@ -4,9 +4,9 @@ function rule()
 	local material = import("$.Material") -- 건들면 안됨!
 	
 	local godModeTick = 600 -- 무적 시간 (틱)
-	local startX = 952.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-	local startY = 33.0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-	local startZ = -155.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+	local double startX = 952.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+	local double startY = 104.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+	local double startZ = -155.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 	
 	local startBorderSize = 1000.0 -- 시작 시 월드 보더의 크기
 	local endBorderSize = 15.0 -- 마지막 월드 보더의 크기
@@ -19,7 +19,8 @@ function rule()
 	}
 	
 	plugin.raffleAbilityOption(true) -- 시작 시 능력을 추첨할 지 결정합니다.
-	plugin.abilityAmountOption(1, false) -- 능력의 추첨 옵션입니다. 숫자로 능력의 추첨 개수를 정하고, true/false로 다른 플레이어와 능력이 중복될 수 있는지를 정합니다. 같은 플레이어에게는 중복된 능력이 적용되지 않습니다.
+	plugin.skipYesOrNoOption(true) -- 플레이어에게 능력 재설정을 가능하게 할 것인지 정합니다.
+	plugin.abilityAmountOption(40, true) -- 능력의 추첨 옵션입니다. 숫자로 능력의 추첨 개수를 정하고, true/false로 다른 플레이어와 능력이 중복될 수 있는지를 정합니다. 같은 플레이어에게는 중복된 능력이 적용되지 않습니다.
 	plugin.abilityItemOption(true, material.IRON_INGOT) -- 능력 발동 아이템 옵션입니다. true/false로 모든 능력의 발동 아이템을 통일 할 것인지 정하고, Material을 통해 통일할 아이템을 설정합니다.
 	plugin.abilityCheckOption(true) -- 능력 확인 옵션입니다. 플레이어가 자신의 능력을 확인할 수 있는 지 정합니다.
 	plugin.cooldownMultiplyOption(1.0) -- 능력 쿨타임 옵션입니다. 해당 값만큼 쿨타임 값에 곱해져 적용됩니다. (예: 0.5일 경우 쿨타임이 기본 쿨타임의 50%, 2.0일 경우 쿨타임이 기본 쿨타임의 200%)
@@ -101,21 +102,40 @@ function rule()
 	-- 사망 시 탈락
 	plugin.registerRuleEvent("PlayerDeathEvent", function(e)
 		if e:getEntity():getType():toString() == "PLAYER" then
-			game.eliminatePlayer(e:getEntity())
-			e:getEntity():getWorld():strikeLightningEffect(e:getEntity():getLocation())
-			game.broadcastMessage("§4[§cLAbility§4] §c" .. e:getEntity():getName() .. "님이 탈락하셨습니다.")
-			game.sendMessage(e:getEntity(), "§4[§cLAbility§4] §c사망으로 인해 탈락하셨습니다.")
-			
-			local players = util.getTableFromList(game.getPlayers())
-			if #players == 1 then
-				game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
-				game.broadcastMessage("§6[§eLAbility§6] §e" .. players[1]:getPlayer():getName() .. "님이 우승하셨습니다!")
-				game.endGame()
-			elseif #players < 1 then
-				game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
-				game.broadcastMessage("§6[§eLAbility§6] §e우승자가 없습니다.")
-				game.endGame()
+			local isPlayer = game.getPlayerAbility(e:getEntity())
+			if isPlayer ~= nil then
+				game.eliminatePlayer(e:getEntity())
+				e:getEntity():getWorld():strikeLightningEffect(e:getEntity():getLocation())
+				game.broadcastMessage("§4[§cLAbility§4] §c" .. e:getEntity():getName() .. "님이 탈락하셨습니다.")
+				game.sendMessage(e:getEntity(), "§4[§cLAbility§4] §c사망으로 인해 탈락하셨습니다.")
+				
+				local players = util.getTableFromList(game.getPlayers())
+				if #players == 1 then
+					game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
+					game.broadcastMessage("§6[§eLAbility§6] §e" .. players[1]:getPlayer():getName() .. "님이 우승하셨습니다!")
+					game.endGame()
+				elseif #players < 1 then
+					game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
+					game.broadcastMessage("§6[§eLAbility§6] §e우승자가 없습니다.")
+					game.endGame()
+				end
 			end
 		end
+	end)
+
+	-- 게임 종료 시 실행 될 코드
+	game.setOnGameEndFunction(function () 
+		if border ~= nil then
+			border:setSize(1000000)
+			border:setCenter(0, 0)
+		end
+
+		util.runLater(function ()
+			local bossbars = util.getTableFromList(plugin.getServer():getBossBars())
+			for i = 1, #bossbars do
+				plugin.getServer():getBossBar(bossbars[i]:getKey()):setVisible(false)
+				plugin.getServer():removeBossBar(bossbars[i]:getKey())
+			end
+		end, 60)
 	end)
 end

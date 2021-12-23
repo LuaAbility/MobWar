@@ -28,9 +28,9 @@ function main(abilityData)
 		local damager = e:getDamager()
 		if e:getCause():toString() == "PROJECTILE" then damager = e:getDamager():getShooter() end
 		
-		if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+		if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" and game.getPlayerAbility(damager) ~= nil then
 			local abilities = util.getTableFromList(game.getPlayerAbility(damager))
-			if abilities[1].abilityType == playerType then
+			if #abilities > 0 and abilities[1].abilityType == playerType then
 				if game.checkCooldown(damagee, a, 0) then
 					e:setCancelled(true)
 				end

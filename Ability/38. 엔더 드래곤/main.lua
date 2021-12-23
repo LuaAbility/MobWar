@@ -3,8 +3,8 @@ function main(abilityData)
 	dragonKey = nil
 	
 	plugin.addPassiveScript(abilityData, 0, function(p)
-		dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), p:getUniqueId():toString() .. "DRAGON"})
-		dragonBossBar = plugin.getServer():createBossBar(dragonKey, p:getName() .. "(엔더 드래곤)", import("$.boss.BarColor").PURPLE, import("$.boss.BarStyle").SEGMENTED_20, { import("$.boss.BarFlag").CREATE_FOG} )
+		dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), p:getUniqueId():toString() .. "DRAGON" .. math.random(1, 100000)})
+		dragonBossBar = plugin.getServer():createBossBar(dragonKey, p:getName() .. "(엔더 드래곤)", import("$.boss.BarColor").PURPLE, import("$.boss.BarStyle").SEGMENTED_20, { } )
 		local players = util.getTableFromList(game.getPlayers())
 		for i = 1, #players do
 			dragonBossBar:addPlayer(players[i]:getPlayer())
@@ -23,6 +23,7 @@ function main(abilityData)
 			for i = 1, #players do
 				dragonBossBar:removePlayer(players[i]:getPlayer())
 			end
+			dragonBossBar:setVisible(false)
 			plugin.getServer():removeBossBar(dragonKey)
 		end
 	end)

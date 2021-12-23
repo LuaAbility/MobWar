@@ -3,8 +3,8 @@ function main(abilityData)
 	witherKey = nil
 	
 	plugin.addPassiveScript(abilityData, 0, function(p)
-		witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), p:getUniqueId():toString() .. "WITHER"})
-		witherBossBar = plugin.getServer():createBossBar(witherKey, p:getName() .. "(위더)", import("$.boss.BarColor").BLUE, import("$.boss.BarStyle").SEGMENTED_20, { import("$.boss.BarFlag").DARKEN_SKY} )
+		witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), p:getUniqueId():toString() .. "WITHER" .. math.random(1, 100000)})
+		witherBossBar = plugin.getServer():createBossBar(witherKey, p:getName() .. "(위더)", import("$.boss.BarColor").BLUE, import("$.boss.BarStyle").SEGMENTED_20, { } )
 		local players = util.getTableFromList(game.getPlayers())
 		for i = 1, #players do
 			witherBossBar:addPlayer(players[i]:getPlayer())
@@ -23,6 +23,7 @@ function main(abilityData)
 			for i = 1, #players do
 				witherBossBar:removePlayer(players[i]:getPlayer())
 			end
+			witherBossBar:setVisible(false)
 			print(plugin.getServer():removeBossBar(witherKey))
 		end
 	end)
