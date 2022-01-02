@@ -1,5 +1,4 @@
 function main(abilityData)
-	local abilityUse = 0
 	plugin.registerEvent(abilityData, "PlayerInteractEvent", 200, function(a, e)
 		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 			if e:getItem() ~= nil then
@@ -8,7 +7,7 @@ function main(abilityData)
 						e:setCancelled(true)
 						local itemStack = { newInstance("$.inventory.ItemStack", {e:getMaterial(), 1}) }
 						e:getPlayer():getInventory():removeItem(itemStack)
-						
+						local abilityUse = tonumber(game.getPlayer(e:getPlayer()):getVariable("MW036-abilityUse"))
 						if abilityUse < 2 then levelOne(e:getPlayer())
 						elseif abilityUse < 4 then levelTwo(e:getPlayer())
 						elseif abilityUse < 6 then levelThree(e:getPlayer())
@@ -24,10 +23,16 @@ function main(abilityData)
 						
 						e:getPlayer():getWorld():spawnParticle(import("$.Particle").VILLAGER_HAPPY, e:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05)
 						e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_VILLAGER_YES, 0.25, 1)
+						
+						game.getPlayer(e:getPlayer()):setVariable("MW036-abilityUse", tostring(abilityUse))
 					end
 				end
 			end
 		end
+	end)
+	
+	plugin.addPassiveScript(abilityData, 0, function(p)
+		game.getPlayer(p):setVariable("MW036-abilityUse", "0")
 	end)
 end
 

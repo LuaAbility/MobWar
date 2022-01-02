@@ -1,9 +1,10 @@
 function main(abilityData)
 	local effect = import("$.potion.PotionEffectType")
-	local playerType = "동물"
-
+	local attribute = import("$.attribute.Attribute")
+	
 	plugin.addPassiveScript(abilityData, 0, function(p)
 		p:getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(6)
+		game.getPlayer(p):addVariable("MW034-playerType", "동물")
 	end)
 	
 	plugin.onPlayerEnd(abilityData, function(p)
@@ -12,11 +13,11 @@ function main(abilityData)
 	
 	plugin.addPassiveScript(abilityData, 1800, function(p)
 		if math.random(2) == 1 then
-			playerType = "동물"
+			game.getPlayer(p):setVariable("MW034-playerType", "동물")
 			game.sendMessage(p, "§2[§a박쥐§2] §a능력 타입이 §2동물§a이 되었습니다.")
 			game.sendMessage(p, "§2[§a박쥐§2] §a동물 능력자에게는 데미지를 입지 않습니다.")
 		else
-			playerType = "몬스터"
+			game.getPlayer(p):setVariable("MW034-playerType", "몬스터")
 			game.sendMessage(p, "§2[§a박쥐§2] §a능력 타입이 §2몬스터§a가 되었습니다.")
 			game.sendMessage(p, "§2[§a박쥐§2] §a몬스터 능력자에게는 데미지를 입지 않습니다.")
 		end
@@ -30,7 +31,7 @@ function main(abilityData)
 		
 		if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" and game.getPlayerAbility(damager) ~= nil then
 			local abilities = util.getTableFromList(game.getPlayerAbility(damager))
-			if #abilities > 0 and abilities[1].abilityType == playerType then
+			if #abilities > 0 and abilities[1].abilityType == game.getPlayer(damagee):getVariable("MW034-playerType") then
 				if game.checkCooldown(damagee, a, 0) then
 					e:setCancelled(true)
 				end

@@ -1,5 +1,4 @@
 function main(abilityData)
-	abilityTime = false
 	plugin.registerEvent(abilityData, "PlayerInteractEvent", 400, function(a, e)
 		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 			if e:getItem() ~= nil then
@@ -10,8 +9,8 @@ function main(abilityData)
 						vector:setY(0.15)
 						vector:setZ(vector:getZ() * 6.0)
 						e:getPlayer():setVelocity(vector)
-						abilityTime = true
-						util.runLater(function() abilityTime = false end, 12)
+						game.getPlayer(e:getPlayer()):setVariable("MW028-abilityTime", "true")
+						util.runLater(function() game.getPlayer(e:getPlayer()):setVariable("MW028-abilityTime", "false") end, 12)
 						e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_GOAT_SCREAMING_PREPARE_RAM, 1, 1)
 					end
 				end
@@ -21,7 +20,7 @@ function main(abilityData)
 	
 	plugin.addPassiveScript(abilityData, 1, function(p)
 		local players = util.getTableFromList(game.getPlayers())
-		if abilityTime then
+		if game.getPlayer(p):getVariable("MW028-abilityTime") == "true" then
 			for i = 1, #players do
 				if players[i]:getPlayer() ~= p then
 					if (p:getLocation():distance(players[i]:getPlayer():getLocation()) <= 3) then
@@ -36,7 +35,7 @@ function main(abilityData)
 						vector:setX(vector:getX() * 0.75)
 						vector:setZ(vector:getZ() * 0.75)
 						p:setVelocity(vector)
-						abilityTime = false
+						game.getPlayer(p):setVariable("MW028-abilityTime", "false")
 						players[i]:getPlayer():getWorld():playSound(players[i]:getPlayer():getLocation(), import("$.Sound").ENTITY_GOAT_SCREAMING_RAM_IMPACT, 1, 1)
 					end
 				end

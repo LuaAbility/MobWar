@@ -1,6 +1,5 @@
 function main(abilityData)
 	local effect = import("$.potion.PotionEffectType")
-	firstFallDamage = false
 	
 	plugin.registerEvent(abilityData, "PlayerInteractEvent", 1600, function(a, e)
 		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
@@ -14,7 +13,7 @@ function main(abilityData)
 							local down = e:getPlayer():getLocation():getBlock():getRelative(import("$.block.BlockFace").DOWN):getType()
 							local moreDown = e:getPlayer():getLocation():getBlock():getRelative(import("$.block.BlockFace").DOWN):getRelative(import("$.block.BlockFace").DOWN):getType()
 							e:getPlayer():setAllowFlight(false)
-							if down:toString() == "AIR" and moreDown:toString() == "AIR" then firstFallDamage = true end
+							if down:toString() == "AIR" and moreDown:toString() == "AIR" then game.getPlayer(e:getPlayer()):setVariable("MW027-firstFallDamage", "true") end
 							e:getPlayer():setFlying(false)
 							game.sendMessage(e:getPlayer(), "§2[§a벡스§2] §a능력 시전 시간이 종료되었습니다.")
 							e:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, e:getPlayer():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)
@@ -32,10 +31,10 @@ function main(abilityData)
 	end)
 	
 	plugin.registerEvent(abilityData, "EntityDamageEvent", 0, function(a, e)
-		if e:getCause():toString() == "FALL" and firstFallDamage then
+		if e:getCause():toString() == "FALL" and game.getPlayer(e:getEntity()):getVariable("MW027-firstFallDamage") == "true" then
 			if game.checkCooldown(e:getEntity(), a, 1) then
 				e:setCancelled(true)
-				firstFallDamage = false
+				game.getPlayer(e:getEntity()):setVariable("MW027-firstFallDamage", "false")
 			end
 		end
 	end)

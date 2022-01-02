@@ -1,5 +1,6 @@
 function main(abilityData)
-	attribute = import("$.attribute.Attribute")
+	local attribute = import("$.attribute.Attribute")
+	
 	plugin.registerEvent(abilityData, "EntityDamageEvent", 0, function(a, e)
 		if e:getEntity():getType():toString() == "PLAYER" then
 			if e:getEntity():getHealth() - e:getDamage() <= 0 then

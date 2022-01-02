@@ -1,30 +1,28 @@
 function main(abilityData)
-	dragonBossBar = nil
-	dragonKey = nil
+	local attribute = import("$.attribute.Attribute")
 	
 	plugin.addPassiveScript(abilityData, 0, function(p)
-		dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), p:getUniqueId():toString() .. "DRAGON" .. math.random(1, 100000)})
-		dragonBossBar = plugin.getServer():createBossBar(dragonKey, p:getName() .. "(엔더 드래곤)", import("$.boss.BarColor").PURPLE, import("$.boss.BarStyle").SEGMENTED_20, { } )
+		game.getPlayer(p):setVariable("MW040-dragonKey", p:getUniqueId():toString() .. "DRAGON")
+		local dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), game.getPlayer(p):getVariable("MW040-dragonKey") })
+		
+		plugin.getServer():createBossBar(dragonKey, p:getName() .. "(엔더 드래곤)", import("$.boss.BarColor").PURPLE, import("$.boss.BarStyle").SEGMENTED_20, { } )
 		local players = util.getTableFromList(game.getPlayers())
 		for i = 1, #players do
-			dragonBossBar:addPlayer(players[i]:getPlayer())
+			plugin.getServer():getBossBar(dragonKey):addPlayer(players[i]:getPlayer())
 		end
 	end)
 	
 	plugin.addPassiveScript(abilityData, 1, function(p)
-		if dragonBossBar ~= nil then
-			dragonBossBar:setProgress(p:getHealth() / p:getAttribute(attribute.GENERIC_MAX_HEALTH):getValue())
+		local dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), game.getPlayer(p):getVariable("MW040-dragonKey") })
+		if plugin.getServer():getBossBar(dragonKey) ~= nil then
+			plugin.getServer():getBossBar(dragonKey):setProgress(p:getHealth() / p:getAttribute(attribute.GENERIC_MAX_HEALTH):getValue())
 		end
 	end)
 	
 	plugin.onPlayerEnd(abilityData, function(p)
-		if dragonKey ~= nil and dragonBossBar ~= nil then
-			local players = util.getTableFromList(dragonBossBar:getPlayers())
-			for i = 1, #players do
-				dragonBossBar:removePlayer(players[i]:getPlayer())
-			end
-			dragonBossBar:setVisible(false)
-			plugin.getServer():removeBossBar(dragonKey)
+		local dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), game.getPlayer(p:getPlayer()):getVariable("MW040-dragonKey") })
+		if plugin.getServer():getBossBar(dragonKey) ~= nil then
+			plugin.getServer():getBossBar(dragonKey):setVisible(false)
 		end
 	end)
 	

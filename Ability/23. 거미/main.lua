@@ -1,5 +1,4 @@
 function main(abilityData)
-	useSpiderAbility = true
 	local blockFace = import("$.block.BlockFace")
 	
 	plugin.registerEvent(abilityData, "PlayerMoveEvent", 0, function(a, e)
@@ -9,7 +8,7 @@ function main(abilityData)
 		local south = e:getPlayer():getLocation():getBlock():getRelative(blockFace.SOUTH):getType()
 		local up = e:getPlayer():getLocation():getBlock():getRelative(blockFace.UP):getRelative(blockFace.UP):getType()
 		
-		if (north:toString() ~= "AIR" or east:toString() ~= "AIR" or west:toString() ~= "AIR" or south:toString() ~= "AIR") and up:toString() == "AIR" and useSpiderAbility then
+		if (north:toString() ~= "AIR" or east:toString() ~= "AIR" or west:toString() ~= "AIR" or south:toString() ~= "AIR") and up:toString() == "AIR" and game.getPlayer(e:getPlayer()):getVariable("MW023-useSpiderAbility") == "true" then
 			local velocity = e:getPlayer():getVelocity()
 			if game.checkCooldown(e:getPlayer(), a, 0) then
 				if e:getPlayer():isSneaking() then
@@ -29,13 +28,13 @@ function main(abilityData)
 			if e:getItem() ~= nil then
 				if game.isAbilityItem(e:getItem(), "IRON_INGOT") then
 					if game.checkCooldown(e:getPlayer(), a, 1) then
-						if useSpiderAbility then
-							useSpiderAbility = false
+						if game.getPlayer(e:getPlayer()):getVariable("MW023-useSpiderAbility") == "true" then
+							game.getPlayer(e:getPlayer()):setVariable("MW023-useSpiderAbility", "false")
 							game.sendMessage(e:getPlayer(), "§2[§a거미§2] §a능력을 비활성화했습니다.")
 							e:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, e:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05)
 							e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_SPIDER_DEATH, 0.25, 1)
 						else
-							useSpiderAbility = true
+							game.getPlayer(e:getPlayer()):setVariable("MW023-useSpiderAbility", "true")
 							game.sendMessage(e:getPlayer(), "§2[§a거미§2] §a능력을 활성화했습니다.")
 							e:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, e:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05)
 							e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_SPIDER_AMBIENT, 0.25, 1)

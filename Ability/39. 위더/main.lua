@@ -1,30 +1,28 @@
 function main(abilityData)
-	witherBossBar = nil
-	witherKey = nil
+	local attribute = import("$.attribute.Attribute")
 	
 	plugin.addPassiveScript(abilityData, 0, function(p)
-		witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), p:getUniqueId():toString() .. "WITHER" .. math.random(1, 100000)})
-		witherBossBar = plugin.getServer():createBossBar(witherKey, p:getName() .. "(위더)", import("$.boss.BarColor").BLUE, import("$.boss.BarStyle").SEGMENTED_20, { } )
+		game.getPlayer(p):setVariable("MW039-witherKey", p:getUniqueId():toString() .. "WITHER")
+		local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), game.getPlayer(p):getVariable("MW039-witherKey") })
+		
+		plugin.getServer():createBossBar(witherKey, p:getName() .. "(위더)", import("$.boss.BarColor").BLUE, import("$.boss.BarStyle").SEGMENTED_20, { } )
 		local players = util.getTableFromList(game.getPlayers())
 		for i = 1, #players do
-			witherBossBar:addPlayer(players[i]:getPlayer())
+			plugin.getServer():getBossBar(witherKey):addPlayer(players[i]:getPlayer())
 		end
 	end)
 	
 	plugin.addPassiveScript(abilityData, 1, function(p)
-		if witherBossBar ~= nil then
-			witherBossBar:setProgress(p:getHealth() / p:getAttribute(attribute.GENERIC_MAX_HEALTH):getValue())
+		local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), game.getPlayer(p):getVariable("MW039-witherKey") })
+		if plugin.getServer():getBossBar(witherKey) ~= nil then
+			plugin.getServer():getBossBar(witherKey):setProgress(p:getHealth() / p:getAttribute(attribute.GENERIC_MAX_HEALTH):getValue())
 		end
 	end)
 	
 	plugin.onPlayerEnd(abilityData, function(p)
-		if witherKey ~= nil and witherBossBar ~= nil then
-			local players = util.getTableFromList(witherBossBar:getPlayers())
-			for i = 1, #players do
-				witherBossBar:removePlayer(players[i]:getPlayer())
-			end
-			witherBossBar:setVisible(false)
-			print(plugin.getServer():removeBossBar(witherKey))
+		local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), game.getPlayer(p:getPlayer()):getVariable("MW039-witherKey") })
+		if plugin.getServer():getBossBar(witherKey) ~= nil then
+			plugin.getServer():getBossBar(witherKey):setVisible(false)
 		end
 	end)
 	
