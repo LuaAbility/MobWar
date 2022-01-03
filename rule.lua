@@ -102,8 +102,8 @@ function rule()
 	-- 사망 시 탈락
 	plugin.registerRuleEvent("PlayerDeathEvent", function(e)
 		if e:getEntity():getType():toString() == "PLAYER" then
-			local isPlayer = game.getPlayerAbility(e:getEntity())
-			if isPlayer ~= nil then
+			local isPlayer = game.getPlayer(e:getEntity())
+			if isPlayer ~= false then
 				game.eliminatePlayer(e:getEntity())
 				e:getEntity():getWorld():strikeLightningEffect(e:getEntity():getLocation())
 				game.broadcastMessage("§4[§cLAbility§4] §c" .. e:getEntity():getName() .. "님이 탈락하셨습니다.")
