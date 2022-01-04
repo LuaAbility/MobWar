@@ -8,10 +8,10 @@ function main(abilityData)
 				if game.isAbilityItem(e:getItem(), "IRON_INGOT") then
 					if e:getPlayer():getTargetBlock(nil, 30):getType():toString() ~= "AIR" then
 						if game.checkCooldown(e:getPlayer(), a, 0) then
-							e:getPlayer():getWorld():spawnParticle(import("$.Particle").PORTAL, e:getPlayer():getLocation():add(0,1,0), 1000, 0.5, 1, 0.5, 0.5)
+							e:getPlayer():getWorld():spawnParticle(import("$.Particle").PORTAL, e:getPlayer():getLocation():add(0,1,0), 1000, 0.1, 0.1, 0.1, 1)
 							e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_ENDERMAN_TELEPORT, 0.5, 1)
 							teleport(e:getPlayer(), e:getPlayer():getTargetBlock(nil, 30))
-							e:getPlayer():getWorld():spawnParticle(import("$.Particle").REVERSE_PORTAL, e:getPlayer():getLocation():add(0,1,0), 1000, 0.5, 1, 0.5, 0.5)
+							e:getPlayer():getWorld():spawnParticle(import("$.Particle").REVERSE_PORTAL, e:getPlayer():getLocation():add(0,1,0), 1000, 0.1, 0.1, 0.1, 1)
 							e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_ENDERMAN_TELEPORT, 0.5, 1)
 						end
 					else game.sendMessage(e:getPlayer(), "§4[§c엔더맨§4] §c허공엔 사용이 불가능합니다.")
