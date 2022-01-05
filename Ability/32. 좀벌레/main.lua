@@ -2,6 +2,7 @@ function main(abilityData)
 	local effect = import("$.potion.PotionEffectType")
 	
 	plugin.registerEvent(abilityData, "BlockBreakEvent", 300, function(a, e)
+		local players = util.getTableFromList(game.getPlayers())
 		local player = { }
 		for i = 1, #players do
 			if players[i]:hasAbility("LA-EX-013") then table.insert(player, players[i]) end
