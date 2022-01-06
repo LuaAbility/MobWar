@@ -12,6 +12,7 @@ function main(abilityData)
 	end)
 	
 	plugin.addPassiveScript(abilityData, 1800, function(p)
+		
 		if math.random(2) == 1 then
 			game.getPlayer(p):setVariable("MW034-playerType", "동물")
 			game.sendMessage(p, "§2[§a박쥐§2] §a능력 타입이 §2동물§a이 되었습니다.")

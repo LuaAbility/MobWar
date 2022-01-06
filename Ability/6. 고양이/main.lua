@@ -8,6 +8,7 @@ function main(abilityData)
 				if game.isAbilityItem(e:getItem(), "BED") and e:getItem():toString() ~= "BEDROCK" then
 					if game.checkCooldown(e:getPlayer(), a, 0) then
 						e:setCancelled(true)
+						
 						local randomNumber = math.random(100)
 						if randomNumber <= 1 then
 							local itemStack = newInstance("$.inventory.ItemStack", {material.ELYTRA, 1})

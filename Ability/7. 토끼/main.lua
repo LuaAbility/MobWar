@@ -16,6 +16,7 @@ function main(abilityData)
 		if e:getCause():toString() == "PROJECTILE" then damager = e:getDamager():getShooter() end
 		
 		if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+			
 			if math.random(100) <= 10 and not game.getPlayer(damagee):getVariable("MW007-redrum") ~= "true" then 
 				if game.checkCooldown(damagee, a, 0) then
 					game.getPlayer(damagee):setVariable("MW007-redrum", "true")

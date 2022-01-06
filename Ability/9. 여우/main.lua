@@ -3,6 +3,7 @@ function main(abilityData)
 	
 	plugin.registerEvent(abilityData, "EntityDamageByEntityEvent", 2000, function(a, e)
 		if e:getDamager():getType():toString() == "PLAYER" and e:getEntity():getType():toString() == "PLAYER" then
+			
 			local randomData = math.random(100)
 			if randomData <= 15 then
 				local item = { e:getEntity():getInventory():getItemInMainHand() }

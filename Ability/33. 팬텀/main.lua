@@ -46,6 +46,7 @@ end
 
 function phantom(p)
 	local attribute = import("$.attribute.Attribute")
+	
 	if math.random(5) >= 1 then
 		local currentTime = p:getWorld():getTime() % 24000
 		local newHealth = p:getHealth() + 4

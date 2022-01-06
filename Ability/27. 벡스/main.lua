@@ -18,6 +18,7 @@ function main(abilityData)
 							game.sendMessage(e:getPlayer(), "§2[§a벡스§2] §a능력 시전 시간이 종료되었습니다.")
 							e:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, e:getPlayer():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)
 							e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_VEX_AMBIENT, 0.25, 1)
+							util.runLater(function() game.getPlayer(e:getEntity()):setVariable("MW027-firstFallDamage", "false") end, 200)
 						end, 600)
 					end
 				end

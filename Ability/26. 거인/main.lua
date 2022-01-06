@@ -1,5 +1,5 @@
 function main(abilityData)
-	local effect = import("$.potion.PotionEffectType")
+	local attribute = import("$.attribute.Attribute")
 	
 	plugin.addPassiveScript(abilityData, 0, function(p)
 		p:getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(40)

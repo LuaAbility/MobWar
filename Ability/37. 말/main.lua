@@ -1,4 +1,6 @@
 function main(abilityData)
+	local attribute = import("$.attribute.Attribute")
+	
 	plugin.registerEvent(abilityData, "PlayerInteractEvent", 2000, function(a, e)
 		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 			if e:getItem() ~= nil then
@@ -28,6 +30,9 @@ function main(abilityData)
 end
 
 function rollStat(player)
+	local attribute = import("$.attribute.Attribute")
+
+	
 	local healthStat = math.random(15, 30)
 	local speedStat = math.random(2500, 5000)
 	

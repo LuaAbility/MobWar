@@ -5,13 +5,15 @@ function main(abilityData)
 		local players = util.getTableFromList(game.getPlayers())
 		local player = { }
 		for i = 1, #players do
-			if players[i]:hasAbility("LA-EX-013") then table.insert(player, players[i]) end
+			if players[i]:hasAbility("LA-MW-032") then table.insert(player, players[i]) end
 		end
+		
 		
 		if #player > 0 then
 			for i = 1, #player do
 				if e:getPlayer() ~= player[i]:getPlayer() then
 					if (player[i]:getPlayer():getLocation():distance(e:getPlayer():getLocation()) <= 25) then
+						
 						if math.random(3) == 1 then
 							if game.checkCooldown(player[i]:getPlayer(), a, 0) then
 								for i = 1, 4 do

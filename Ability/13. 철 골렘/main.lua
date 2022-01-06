@@ -1,7 +1,9 @@
 function main(abilityData)
+	local attribute = import("$.attribute.Attribute")
 	local effect = import("$.potion.PotionEffectType")
 	
 	plugin.registerEvent(abilityData, "EntityDamageByEntityEvent", 300, function(a, e)
+		
 		if e:getDamager():getType():toString() == "PLAYER" and e:getEntity():getType():toString() == "PLAYER" then
 			if math.random() <= 0.2 then
 				if game.checkCooldown(e:getDamager(), a, 0) then

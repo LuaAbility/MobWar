@@ -12,6 +12,7 @@ function main(abilityData)
 						local itemStack = { newInstance("$.inventory.ItemStack", {e:getMaterial(), 1}) }
 						e:getPlayer():getInventory():removeItem(itemStack)
 						
+						
 						local randomNumber = math.random(100)
 						if randomNumber <= 1 then
 							local itemStack = newInstance("$.inventory.ItemStack", {material.END_CRYSTAL, 1})

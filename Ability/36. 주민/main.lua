@@ -38,6 +38,7 @@ end
 
 
 function levelOne(player)
+	
 	local randomNumber = math.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BREAD, math.random(3, 6)})

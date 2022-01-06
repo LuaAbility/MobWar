@@ -17,6 +17,7 @@ function main(abilityData)
 	
 	plugin.registerEvent(abilityData, "EntityDamageByEntityEvent", 400, function(a, e)
 		if e:getDamager():getType():toString() == "PLAYER" and e:getEntity():getType():toString() == "PLAYER" then
+			
 			if math.random(10) <= 2 then
 				if game.checkCooldown(e:getDamager(), a, 1) then
 					e:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.WITHER, 200, 0}))

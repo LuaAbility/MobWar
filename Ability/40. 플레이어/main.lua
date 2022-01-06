@@ -41,6 +41,7 @@ function main(abilityData)
 end
 
 function setDifficult(p)
+	
 	local difficult = math.random(1, 5)
 	if difficult == 1 then game.sendMessage(p, "§2[§a플레이어§2] §a난이도가 §b평화로움§a이 되었습니다.")
 	elseif difficult == 2 then game.sendMessage(p, "§2[§a플레이어§2] §a난이도가 §e쉬움§a이 되었습니다.")

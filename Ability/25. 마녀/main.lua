@@ -1,7 +1,8 @@
 function main(abilityData)
 	local effect = import("$.potion.PotionEffectType")
+	local attribute = import("$.attribute.Attribute")
 	
-	plugin.registerEvent(abilityData, "PlayerInteractEvent", 1600, function(a, e)
+	plugin.registerEvent(abilityData, "PlayerInteractEvent", 2400, function(a, e)
 		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 			local arrow = {newInstance("$.inventory.ItemStack", { import("$.Material").ARROW, 1 }) }
 			if e:getItem() ~= nil then
@@ -23,6 +24,7 @@ function main(abilityData)
 			local item = { e:getDamager():getInventory():getItemInMainHand() }
 			if game.isAbilityItem(item[1], "GLASS_BOTTLE") then
 				if game.checkCooldown(e:getDamager(), a, 1) then
+					
 					local randomData = math.random(3)
 					if randomData == 1 then e:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SLOW, 300, 0})) end
 					if randomData == 2 then e:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.POISON, 300, 0})) end

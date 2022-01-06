@@ -1,17 +1,19 @@
 function rule()
+	math.randomseed(os.time()) -- 건들면 안됨!
+	
 	local godMode = false -- 건들면 안됨!
 	local border = nil -- 건들면 안됨!
 	local material = import("$.Material") -- 건들면 안됨!
 	
-	local godModeTick = 600 -- 무적 시간 (틱)
-	local double startX = 952.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-	local double startY = 104.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-	local double startZ = -155.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+	local godModeTick = 3600 -- 무적 시간 (틱)
+	local double startX = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+	local double startY = 80 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+	local double startZ = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 	
-	local startBorderSize = 1000.0 -- 시작 시 월드 보더의 크기
-	local endBorderSize = 15.0 -- 마지막 월드 보더의 크기
-	local borderChangeSecond = 60 -- 월드보더의 크기가 변화하는 시간
-	local endBorderTick = 1200 -- 월드보더 크기 축소 시작 시간 (틱)
+	local startBorderSize = 1000000.0 -- 시작 시 월드 보더의 크기
+	local endBorderSize = 20.0 -- 마지막 월드 보더의 크기
+	local borderChangeSecond = 120 -- 월드보더의 크기가 변화하는 시간
+	local endBorderTick = 18000 -- 월드보더 크기 축소 시작 시간 (틱)
 	
 	local startItem = {  -- 시작 시 지급 아이템
 		newInstance("$.inventory.ItemStack", {material.IRON_SWORD, 1}), 
@@ -61,7 +63,7 @@ function rule()
 		local players = util.getTableFromList(game.getPlayers())
 		for i = 1, #players do
 			players[i]:getPlayer():getInventory():clear() -- 인벤토리 초기화
-			players[i]:getPlayer():getInventory():addItem(startItem) -- 아이템 지급
+			-- players[i]:getPlayer():getInventory():addItem(startItem) -- 아이템 지급
 		end
 	end)
 	
@@ -81,8 +83,8 @@ function rule()
 			border:setSize(endBorderSize, borderChangeSecond)
 			game.broadcastMessage("§4[§cLAbility§4] §c지금부터 월드의 크기가 작아집니다!")
 			game.broadcastMessage("§4[§cLAbility§4] §c크기는 ".. borderChangeSecond .. "초 동안 축소됩니다.")
-			game.broadcastMessage("§4[§cLAbility§4] §c기준 좌표 : X - " .. startX .. " / Z - " .. startZ)
-			game.broadcastMessage("§4[§cLAbility§4] §c기준 크기 : " .. endBorderSize .. "칸")
+			game.broadcastMessage("§4[§cLAbility§4] §c기준 좌표 - X : " .. startX .. " / Z : " .. startZ)
+			game.broadcastMessage("§4[§cLAbility§4] §c크기 - " .. endBorderSize .. "칸")
 		end
 	end)
 	
@@ -126,7 +128,7 @@ function rule()
 	-- 게임 종료 시 실행 될 코드
 	game.setOnGameEndFunction(function () 
 		if border ~= nil then
-			border:setSize(1000000)
+			border:setSize(10000000)
 			border:setCenter(0, 0)
 		end
 
