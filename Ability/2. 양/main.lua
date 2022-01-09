@@ -1,33 +1,39 @@
-function main(abilityData)
-	local effect = import("$.potion.PotionEffectType")
+local effect = import("$.potion.PotionEffectType")
+
+function Init(abilityData)
+	plugin.registerEvent(abilityData, "MW002-panelty", "PlayerItemConsumeEvent", 0)
+	plugin.registerEvent(abilityData, "MW002-heal", "PlayerInteractEvent", 400)
+end
+
+function onEvent(funcTable)
+	if funcTable[1] == "MW002-panelty" then panelty(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW002-heal" then heal(funcTable[2], funcTable[4], funcTable[1]) end
+end
 	
-	plugin.registerEvent(abilityData, "PlayerItemConsumeEvent", 0, function(a, e)
-		if e:getItem():getType():toString() == "COOKED_MUTTON" or e:getItem():getType():toString() == "MUTTON" then
-			if game.checkCooldown(e:getPlayer(), a, 0) then
-				e:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 100, 0}))
-			end
+	
+function panelty(event, ability, id)
+	if event:getItem():getType():toString() == "COOKED_MUTTON" or event:getItem():getType():toString() == "MUTTON" then
+		if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+			event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 100, 0}))
 		end
-	end)
-	
-	plugin.registerEvent(abilityData, "PlayerInteractEvent", 400, function(a, e)
-		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
-			if e:getItem() ~= nil then
-				if game.isAbilityItem(e:getItem(), "GRASS") then
-					if game.checkCooldown(e:getPlayer(), a, 1) then
-						e:setCancelled(true)
-						e:getPlayer():setFoodLevel(e:getPlayer():getFoodLevel() + 4)
-						if (e:getPlayer():getFoodLevel() >= 20) then 
-							e:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.REGENERATION, 100, 2}))
-						else 
-							e:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.REGENERATION, 100, 1}))
-						end
-						local itemStack = { newInstance("$.inventory.ItemStack", {e:getMaterial(), 1}) }
-						e:getPlayer():getInventory():removeItem(itemStack)
-						e:getPlayer():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, e:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").KELP}))
-						e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_SHEEP_AMBIENT, 0.25, 1)
-					end
+	end
+end
+
+function heal(event, ability, id)
+	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
+		if event:getItem() ~= nil then
+			if game.isAbilityItem(event:getItem(), "CARROT_ON_A_STICK") then
+				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+					event:setCancelled(true)
+					event:getPlayer():setFoodLevel(event:getPlayer():getFoodLevel() + 4)
+					if (event:getPlayer():getFoodLevel() >= 20) then event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.REGENERATION, 100, 2}))
+					else event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.REGENERATION, 100, 1})) end
+					local itemStack = { newInstance("$.inventory.ItemStack", {event:getMaterial(), 1}) }
+					event:getPlayer():getInventory():removeItem(itemStack)
+					event:getPlayer():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").KELP}))
+					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_SHEEP_AMBIENT, 0.25, 1)
 				end
 			end
 		end
-	end)
+	end
 end

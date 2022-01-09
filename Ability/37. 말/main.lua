@@ -1,38 +1,41 @@
-function main(abilityData)
-	local attribute = import("$.attribute.Attribute")
-	
-	plugin.registerEvent(abilityData, "PlayerInteractEvent", 2000, function(a, e)
-		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
-			if e:getItem() ~= nil then
-				if game.isAbilityItem(e:getItem(), "WHEAT") then
-					if game.checkCooldown(e:getPlayer(), a, 0) then
-						rollStat(e:getPlayer())
-					end
+local attribute = import("$.attribute.Attribute")
+
+function Init(abilityData)
+	plugin.registerEvent(abilityData, "MW037-changeStat", "PlayerInteractEvent", 2000)
+	plugin.registerEvent(abilityData, "MW037-respawn", "PlayerRespawnEvent", 0)
+end
+
+function onEvent(funcTable)
+	if funcTable[1] == "MW037-changeStat" then changeStat(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW037-respawn" then respawn(funcTable[2], funcTable[4], funcTable[1]) end
+end
+
+function onTimer(player, ability)
+	if player:getVariable("MW037-passiveCount") == nil then 
+		player:setVariable("MW037-passiveCount", 0) 
+		rollStat(player:getPlayer())
+	end
+end
+
+function respawn(event, ability, id)
+	if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+		rollStat(event:getPlayer())
+	end
+end
+
+function changeStat(event, ability, id)
+	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
+		if event:getItem() ~= nil then
+			if game.isAbilityItem(event:getItem(), "WHEAT") then
+				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+					rollStat(event:getPlayer())
 				end
 			end
 		end
-	end)
-	
-	plugin.addPassiveScript(abilityData, 0, function(p)
-		rollStat(p)
-	end)
-
-	plugin.registerEvent(abilityData, "PlayerDeathEvent", 0, function(a, e)
-		if game.checkCooldown(e:getEntity(), a, 1) then
-			rollStat(e:getEntity())
-		end
-	end)
-	
-	plugin.onPlayerEnd(abilityData, function(p)
-		p:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(p:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getDefaultValue())
-		p:getPlayer():setWalkSpeed(0.2)
-	end)
+	end
 end
 
 function rollStat(player)
-	local attribute = import("$.attribute.Attribute")
-
-	
 	local healthStat = math.random(15, 30)
 	local speedStat = math.random(2500, 5000)
 	
@@ -40,4 +43,9 @@ function rollStat(player)
 	player:setWalkSpeed(speedStat / 10000.0)
 	game.sendMessage(player, "§2[§a말§2] §a체력 : " .. healthStat .. " / 속도 : " .. speedStat / 10000.0 .. "로 재설정 되었습니다.")
 	player:getWorld():playSound(player:getLocation(), import("$.Sound").ENTITY_HORSE_AMBIENT, 1, 1)
+end
+
+function Reset(player, ability)
+	player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getDefaultValue())
+	player:getPlayer():setWalkSpeed(0.2)
 end

@@ -1,44 +1,54 @@
-function main(abilityData)
-	local effect = import("$.potion.PotionEffectType")
-	
-	plugin.registerEvent(abilityData, "PlayerItemConsumeEvent", 0, function(a, e)
-		if e:getItem():getType():toString() == "ROTTEN_FLESH" then
-			if game.checkCooldown(e:getPlayer(), a, 0) then
-				e:getPlayer():setFoodLevel(e:getPlayer():getFoodLevel() + 4)
-				local itemStack = { newInstance("$.inventory.ItemStack", {e:getItem():getType(), 1}) }
-				e:getPlayer():getInventory():removeItem(itemStack)
-				e:setCancelled(true)
+local effect = import("$.potion.PotionEffectType")
+
+function Init(abilityData)
+	plugin.registerEvent(abilityData, "MW015-cancelBadEffect", "PlayerItemConsumeEvent", 0)
+	plugin.registerEvent(abilityData, "MW015-cancelTarget", "EntityTargetEvent", 0)
+	plugin.registerEvent(abilityData, "MW015-infectAbility", "PlayerDeathEvent", 0)
+end
+
+function onEvent(funcTable)
+	if funcTable[1] == "MW015-cancelBadEffect" then cancelBadEffect(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW015-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW015-infectAbility" then infectAbility(funcTable[2], funcTable[4], funcTable[1]) end
+end
+
+function cancelBadEffect(event, ability, id)
+	if event:getItem():getType():toString() == "ROTTEN_FLESH" then
+		if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+			event:getPlayer():setFoodLevel(event:getPlayer():getFoodLevel() + 4)
+			local itemStack = { newInstance("$.inventory.ItemStack", {event:getItem():getType(), 1}) }
+			event:getPlayer():getInventory():removeItem(itemStack)
+			event:setCancelled(true)
+		end
+	end
+end
+
+function cancelTarget(event, ability, id)
+	if event:getTarget() ~= nil and event:getEntity() ~= nil then
+		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "ZOMBIE" then
+			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+				event:setTarget(nil)
+				event:setCancelled(true)
 			end
 		end
-	end)
+	end
+end
+
+function infectAbility(event, ability, id)
+	local damageEvent = event:getEntity():getLastDamageCause()
 	
-	plugin.registerEvent(abilityData, "EntityTargetLivingEntityEvent", 0, function(a, e)
-		if e:getTarget() ~= nil and e:getEntity() ~= nil then
-			if e:getTarget():getType():toString() == "PLAYER" and e:getEntity():getType():toString() == "ZOMBIE" then
-				if game.checkCooldown(e:getTarget(), a, 1) then
-					e:setTarget(nil)
-					e:setCancelled(true)
-				end
-			end
-		end
-	end)
-	
-	plugin.registerEvent(abilityData, "PlayerDeathEvent", 0, function(a, e)
-		local damageEvent = e:getEntity():getLastDamageCause()
+	if (damageEvent ~= nil and damageEvent:isCancelled() == false and damageEvent:getEventName() == "EntityDamageByEntityEvent") then
+		local damagee = damageEvent:getEntity()
+		local damager = damageEvent:getDamager()
+		if damageEvent:getCause():toString() == "PROJECTILE" then damager = damageEvent:getDamager():getShooter() end
 		
-		if (damageEvent ~= nil and damageEvent:isCancelled() == false and damageEvent:getEventName() == "EntityDamageByEntityEvent") then
-			local damagee = damageEvent:getEntity()
-			local damager = damageEvent:getDamager()
-			if damageEvent:getCause():toString() == "PROJECTILE" then damager = damageEvent:getDamager():getShooter() end
-			
-			if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
-				if game.checkCooldown(e:getEntity(), a, 2) then
-					game.changeAbility(damager, a, "LA-MW-015", true)
-					damager:getWorld():spawnParticle(import("$.Particle").REDSTONE, damager:getLocation():add(0,1,0), 300, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))
-					damager:getWorld():playSound(damager:getLocation(), import("$.Sound").ENTITY_ZOMBIE_INFECT, 1, 1)
-					damager:getWorld():playSound(damager:getLocation(), import("$.Sound").ENTITY_ZOMBIE_AMBIENT, 1, 1)
-				end
+		if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+			if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+				game.changeAbility(game.getPlayer(damager), ability, "LA-MW-015", true)
+				damager:getWorld():spawnParticle(import("$.Particle").REDSTONE, damager:getLocation():add(0,1,0), 300, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))
+				damager:getWorld():playSound(damager:getLocation(), import("$.Sound").ENTITY_ZOMBIE_INFECT, 1, 1)
+				damager:getWorld():playSound(damager:getLocation(), import("$.Sound").ENTITY_ZOMBIE_AMBIENT, 1, 1)
 			end
 		end
-	end)
+	end
 end
