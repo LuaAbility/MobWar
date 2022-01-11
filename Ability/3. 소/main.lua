@@ -13,7 +13,7 @@ end
 function onTimer(player, ability)
 	if player:getVariable("MW003-cowBlindness") == nil then player:setVariable("MW003-cowBlindness", 0) end
 	local count = player:getVariable("MW003-cowBlindness")
-	if count > 0 then count = count - 1 end
+	if count > 0 then count = count - 2 end
 	player:setVariable("MW003-cowBlindness", count)
 end
 

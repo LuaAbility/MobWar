@@ -14,11 +14,11 @@ function onTimer(player, ability)
 	if player:getVariable("MW028-passiveCount") == nil then player:setVariable("MW028-passiveCount", 0) end
 	local count = player:getVariable("MW028-passiveCount")
 	Resistance(player)
-	if count == 600 then 
+	if count >= 600 then 
 		count = 0
 		Shoot(player)
 	end
-	count = count + 1
+	count = count + 2
 	player:setVariable("MW028-passiveCount", count)
 end
 

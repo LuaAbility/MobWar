@@ -11,11 +11,11 @@ end
 function onTimer(player, ability)
 	if player:getVariable("MW012-passiveCount") == nil then player:setVariable("MW012-passiveCount", 0) end
 	local count = player:getVariable("MW012-passiveCount")
-	if count == 100 then 
+	if count >= 100 then 
 		count = 0
 		freeze(player)
 	end
-	count = count + 1
+	count = count + 2
 	player:setVariable("MW012-passiveCount", count)
 end
 

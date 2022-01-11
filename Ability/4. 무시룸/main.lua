@@ -23,7 +23,7 @@ function changeAbility(event, ability, id)
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "SHEARS") then
 				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
-					game.changeAbility(game.getPlayer(event:getPlayer()), ability, "LA-MW-003", false)
+					util.runLater(function() game.changeAbility(game.getPlayer(event:getPlayer()), ability, "LA-MW-003", false) end, 1)
 					event:getPlayer():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").RED_MUSHROOM}))
 					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_MOOSHROOM_SHEAR, 0.25, 1)
 					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_COW_AMBIENT, 0.25, 1)

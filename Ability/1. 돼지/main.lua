@@ -37,7 +37,7 @@ end
 function changeAbility(event, ability, id)
 	if event:getDamager():getType():toString() == "LIGHTNING" and event:getEntity():getType():toString() == "PLAYER" then
 		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
-			game.changeAbility(game.getPlayer(event:getEntity()), ability, "LA-MW-014", false)
+			util.runLater(function() game.changeAbility(game.getPlayer(event:getEntity()), ability, "LA-MW-014", false) end, 1)
 			event:getEntity():getWorld():spawnParticle(import("$.Particle").VILLAGER_ANGRY, event:getEntity():getLocation():add(0,1,0), 20, 0.5, 1, 0.5, 0.05)
 			event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 1, 1)
 		end

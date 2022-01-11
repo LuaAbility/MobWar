@@ -5,11 +5,11 @@ function Init(abilityData) end
 function onTimer(player, ability)
 	if player:getVariable("MW010-passiveCount") == nil then player:setVariable("MW010-passiveCount", 0) end
 	local count = player:getVariable("MW010-passiveCount")
-	if count == 20 then 
+	if count >= 20 then 
 		count = 0
 		addEffect(player)
 	end
-	count = count + 1
+	count = count + 2
 	player:setVariable("MW010-passiveCount", count)
 end
 
