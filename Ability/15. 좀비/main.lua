@@ -45,6 +45,7 @@ function infectAbility(LAPlayer, event, ability, id)
 		if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 				util.runLater(function() game.changeAbility(game.getPlayer(damager), ability, "LA-MW-015", true) end, 1)
+				game.sendMessage(damager, "§4좀비 §c능력에 감염되었습니다.")
 				damager:getWorld():spawnParticle(import("$.Particle").REDSTONE, damager:getLocation():add(0,1,0), 300, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))
 				damager:getWorld():playSound(damager:getLocation(), import("$.Sound").ENTITY_ZOMBIE_INFECT, 1, 1)
 				damager:getWorld():playSound(damager:getLocation(), import("$.Sound").ENTITY_ZOMBIE_AMBIENT, 1, 1)
