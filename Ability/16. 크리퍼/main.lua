@@ -9,20 +9,20 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW016-boom" then boom(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW016-cancelExpDamage" and funcTable[2]:getEventName() == "EntityDamageByBlockEvent" then cancelExpDamage(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW016-increaseExp" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then increaseExp(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW016-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW016-boom" then boom(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW016-cancelExpDamage" and funcTable[2]:getEventName() == "EntityDamageByBlockEvent" then cancelExpDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW016-increaseExp" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then increaseExp(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW016-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
 	if player:getVariable("MW016-lightningStack") == nil then player:setVariable("MW016-lightningStack", 1) end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "CREEPER" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -30,10 +30,10 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function cancelExpDamage(event, ability, id)
+function cancelExpDamage(LAPlayer, event, ability, id)
 	if event:getCause() == cause.DamageCause.BLOCK_EXPLOSION then
 		if event:getEntity():getType():toString() == "PLAYER" then
-			if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 				if event:getEntity():getName() == game.getPlayer(event:getEntity()):getVariable("MW016-playerName") then
 					game.getPlayer(event:getEntity()):removeVariable("MW016-playerName")
 					event:setCancelled(true)
@@ -43,9 +43,9 @@ function cancelExpDamage(event, ability, id)
 	end
 end
 
-function increaseExp(event, ability, id)
+function increaseExp(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "LIGHTNING" and event:getEntity():getType():toString() == "PLAYER" then
-		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id, false) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id, false) then
 			local lightningStack = game.getPlayer(event:getEntity()):getVariable("MW016-lightningStack") + 0.5
 			
 			if lightningStack > 3 then 
@@ -62,11 +62,11 @@ function increaseExp(event, ability, id)
 	end
 end
 
-function boom(event, ability, id)
+function boom(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "GUNPOWDER") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					game.getPlayer(event:getPlayer()):setVariable("MW016-playerName", event:getPlayer():getName())
 					event:getPlayer():getLocation():getWorld():createExplosion(event:getPlayer():getLocation(), 10.0 * game.getPlayer(event:getPlayer()):getVariable("MW016-lightningStack"))
 					local itemStack = { newInstance("$.inventory.ItemStack", {event:getMaterial(), 1}) }

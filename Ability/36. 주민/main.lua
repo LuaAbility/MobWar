@@ -3,18 +3,18 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW036-trade" then trade(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW036-trade" then trade(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
 	if player:getVariable("MW036-abilityUse") == nil then player:setVariable("MW036-abilityUse", 0) end
 end
 
-function trade(event, ability, id)
+function trade(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "EMERALD") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					event:setCancelled(true)
 					local itemStack = { newInstance("$.inventory.ItemStack", {event:getMaterial(), 1}) }
 					event:getPlayer():getInventory():removeItem(itemStack)

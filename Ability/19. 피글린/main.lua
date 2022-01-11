@@ -9,15 +9,15 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW019-giveItem" then giveItem(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW019-goldDamage" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then goldDamage(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW019-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW019-giveItem" then giveItem(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW019-goldDamage" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then goldDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW019-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PIGLIN" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -25,22 +25,22 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function goldDamage(event, ability, id)
+function goldDamage(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" then
 		local item = event:getDamager():getInventory():getItemInMainHand()
 		if string.find(item:getType():toString(), "GOLD") then
-			if game.checkCooldown(game.getPlayer(event:getDamager()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				event:setDamage(event:getDamage() * 1.5)
 			end
 		end
 	end
 end
 
-function giveItem(event, ability, id)
+function giveItem(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "GOLD_INGOT") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					event:setCancelled(true)
 					local itemStack = { newInstance("$.inventory.ItemStack", {event:getMaterial(), 1}) }
 					event:getPlayer():getInventory():removeItem(itemStack)

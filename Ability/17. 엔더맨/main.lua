@@ -5,9 +5,9 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW017-teleport" then teleportAbility(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW017-cancelArrow" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelArrow(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW017-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW017-teleport" then teleportAbility(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW017-cancelArrow" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelArrow(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW017-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -29,10 +29,10 @@ function addDamage(player)
 	end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "ENDERMAN" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -40,16 +40,16 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function teleportAbility(event, ability, id)
+function teleportAbility(LAPlayer, event, ability, id)
 		if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					if event:getPlayer():getTargetBlock(nil, 30):getType():toString() ~= "AIR" then
-						event:getPlayer():getWorld():spawnParticle(import("$.Particle").PORTAL, event:getPlayer():getLocation():add(0,1,0), 1000, 0.1, 0.1, 0.1, 1)
+						event:getPlayer():getWorld():spawnParticle(import("$.Particle").PORTAL, event:getPlayer():getLocation():add(0,1,0), 1000, 0.1, 0.1, 0.1)
 						event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_ENDERMAN_TELEPORT, 0.5, 1)
 						teleport(event:getPlayer(), event:getPlayer():getTargetBlock(nil, 30))
-						event:getPlayer():getWorld():spawnParticle(import("$.Particle").REVERSE_PORTAL, event:getPlayer():getLocation():add(0,1,0), 1000, 0.1, 0.1, 0.1, 1)
+						event:getPlayer():getWorld():spawnParticle(import("$.Particle").REVERSE_PORTAL, event:getPlayer():getLocation():add(0,1,0), 1000, 0.1, 0.1, 0.1)
 						event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_ENDERMAN_TELEPORT, 0.5, 1)
 					else game.sendMessage(event:getPlayer(), "§4[§c엔더맨§4] §c허공엔 사용이 불가능합니다.") ability:resetCooldown(id) end
 				end
@@ -58,9 +58,9 @@ function teleportAbility(event, ability, id)
 	end
 end
 
-function cancelArrow(event, ability, id)
+function cancelArrow(LAPlayer, event, ability, id)
 	if event:getCause():toString() == "PROJECTILE" and event:getEntity():getType():toString() == "PLAYER" then
-		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			event:setCancelled(true)
 		end
 	end

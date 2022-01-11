@@ -4,8 +4,8 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW033-shareAbility" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then shareAbility(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW033-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW033-shareAbility" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then shareAbility(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW033-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -19,10 +19,10 @@ function onTimer(player, ability)
 	player:setVariable("MW033-passiveCount", count)
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PHANTOM" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -30,11 +30,11 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function shareAbility(event, ability, id)
+function shareAbility(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
 		local item = { event:getDamager():getInventory():getItemInMainHand() }
 		if game.isAbilityItem(item[1], "IRON_INGOT") then
-			if game.checkCooldown(game.getPlayer(event:getDamager()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				game.getPlayer(event:getDamager()):setVariable("MW033-targetPlayer", game.getPlayer(event:getEntity()))
 				game.sendMessage(event:getEntity(), "§c팬텀에게 능력이 공유되었습니다. 게임시간 기준 24시간이 지나면 능력 공유가 해제됩니다.")
 				event:getEntity():getWorld():spawnParticle(import("$.Particle").REDSTONE, event:getEntity():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))

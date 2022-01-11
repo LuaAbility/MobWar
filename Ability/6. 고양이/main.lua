@@ -6,7 +6,7 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW006-getBedItem" then getBedItem(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW006-getBedItem" then getBedItem(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -24,11 +24,11 @@ function runAway(player)
 	end
 end
 
-function getBedItem(event, ability, id)
+function getBedItem(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "BED") and event:getItem():toString() ~= "BEDROCK" then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					event:setCancelled(true)
 					
 					local randomNumber = math.random(100)

@@ -5,7 +5,7 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW007-damaged" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW007-damaged" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -30,7 +30,7 @@ function addEffect(player, count)
 	end
 end
 
-function damaged(event, ability, id)
+function damaged(LAPlayer, event, ability, id)
 	local damagee = event:getEntity()
 	local damager = event:getDamager()
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
@@ -38,7 +38,7 @@ function damaged(event, ability, id)
 	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 		
 		if math.random(100) <= 10 and game.getPlayer(damagee):getVariable("MW007-redrum") ~= true then 
-			if game.checkCooldown(game.getPlayer(damagee), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then
 				game.getPlayer(damagee):setVariable("MW007-redrum", true)
 				damagee:getWorld():spawnParticle(import("$.Particle").REDSTONE, damagee:getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))
 				damagee:getWorld():playSound(damagee:getLocation(), import("$.Sound").ENTITY_RABBIT_ATTACK, 0.5, 1)

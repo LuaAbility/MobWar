@@ -5,7 +5,7 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW034-checkAbility" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then checkAbility(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW034-checkAbility" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then checkAbility(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -22,7 +22,7 @@ function onTimer(player, ability)
 	player:setVariable("MW034-passiveCount", count)
 end
 
-function checkAbility(event, ability, id)
+function checkAbility(LAPlayer, event, ability, id)
 	local damagee = event:getEntity()
 	local damager = event:getDamager()
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
@@ -30,11 +30,11 @@ function checkAbility(event, ability, id)
 	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" and game.getPlayerAbility(game.getPlayer(damager)) ~= nil then
 		local abilities = util.getTableFromList(game.getPlayerAbility(game.getPlayer(damager)))
 		if #abilities > 0 and abilities[1].abilityType == game.getPlayer(damagee):getVariable("MW034-playerType") then
-			if game.checkCooldown(game.getPlayer(damagee), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then
 				event:setCancelled(true)
 			end
 		else
-			if game.checkCooldown(game.getPlayer(damagee), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then
 				damagee:getWorld():playSound(damagee:getLocation(), import("$.Sound").ENTITY_BAT_HURT, 0.25, 1)
 			end
 		end

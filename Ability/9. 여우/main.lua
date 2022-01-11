@@ -3,16 +3,16 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW009-steal" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then steal(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW009-steal" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then steal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
-function steal(event, ability, id)
+function steal(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
 		local randomData = math.random(100)
 		if randomData <= 15 then
 			local item = { event:getEntity():getInventory():getItemInMainHand() }
 			if item[1] ~= nil and item[1]:getType():toString() ~= "AIR" then
-				if game.checkCooldown(game.getPlayer(event:getDamager()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 					event:getEntity():getInventory():removeItem(item)
 					event:getDamager():getInventory():addItem(item)
 					game.sendMessage(event:getEntity(), "§a쇽!")

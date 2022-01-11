@@ -8,15 +8,15 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW013-throw" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then throw(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW013-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW013-heal" then heal(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW013-throw" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then throw(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW013-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW013-heal" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
-function throw(event, ability, id)
+function throw(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
 		if math.random() <= 0.2 then
-			if game.checkCooldown(game.getPlayer(event:getDamager()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				event:getEntity():damage(event:getDamage(), event:getDamager())
 				event:setCancelled(true)
 				local vector = event:getDamager():getEyeLocation():getDirection()
@@ -33,10 +33,10 @@ function throw(event, ability, id)
 	end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "IRON_GOLEM" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -44,13 +44,13 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function heal(event, ability, id)
+function heal(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
 				local maxHealth = event:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getValue()
 				if event:getPlayer():getHealth() < maxHealth then
-					if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+					if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 						event:setCancelled(true)
 						local newHealth = event:getPlayer():getHealth() + 4
 						if newHealth > maxHealth then newHealth = maxHealth end

@@ -6,8 +6,8 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW028-cancelBullet" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelBullet(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW028-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW028-cancelBullet" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelBullet(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW028-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -22,18 +22,18 @@ function onTimer(player, ability)
 	player:setVariable("MW028-passiveCount", count)
 end
 
-function cancelBullet(event, ability, id)
+function cancelBullet(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "SHULKER_BULLET" and event:getEntity():getType():toString() == "PLAYER" then
-		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			event:setCancelled(true)
 		end
 	end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and (event:getEntity():getType():toString() == "SHULKER" or event:getEntity():getType():toString() == "SHULKER_BULLET") then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -43,7 +43,7 @@ end
 
 function Resistance(player)
 	if player:getPlayer():isSneaking() then
-		player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.DAMAGE_RESISTANCE, 2, 0}))
+		player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.DAMAGE_RESISTANCE, 4, 0}))
 		player:getPlayer():setWalkSpeed(0)
 		player:getPlayer():setVelocity(newInstance("$.util.Vector", {}))
 	else 

@@ -6,8 +6,8 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW039-ability" then ability(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW039-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW039-ability" then ability(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW039-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -18,10 +18,10 @@ function onTimer(player, ability)
 	updateBossbar(player)
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and string.find(event:getEntity():getType():toString(), "WITHER") then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -29,11 +29,11 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function ability(event, ability, id)
+function ability(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					for i = 1, 2 do
 						local entity = event:getPlayer():getWorld():spawnEntity(event:getPlayer():getLocation(), import("$.entity.EntityType").WITHER_SKELETON)
 						util.runLater(function()
@@ -50,7 +50,7 @@ function ability(event, ability, id)
 	if event:getAction():toString() == "LEFT_CLICK_AIR" or event:getAction():toString() == "LEFT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					local players = util.getTableFromList(game.getPlayers())
 					for i = 1, #players do
 						if players[i]:getPlayer() ~= event:getPlayer() then
@@ -80,16 +80,16 @@ function ability(event, ability, id)
 	end
 end
 
-function cancelEffect(event, ability, id)
+function cancelEffect(LAPlayer, event, ability, id)
 	if (event:getDamager():getType():toString() == "DRAGON_FIREBALL" or event:getDamager():getType():toString() == "AREA_EFFECT_CLOUD") and event:getEntity():getType():toString() == "PLAYER" then
-		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			event:setCancelled(true)
 		end
 	end
 end
 
 function createBossbar(player)
-	player:setVariable("MW039-witherKey", player:getPlayer():getUniqueId():toString() .. "DRAGON")
+	player:setVariable("MW039-witherKey", player:getPlayer():getUniqueId():toString() .. "wither")
 	local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getVariable("MW039-witherKey") })
 	
 	plugin.getServer():createBossBar(witherKey, player:getPlayer():getName() .. "(위더)", import("$.boss.BarColor").BLUE, import("$.boss.BarStyle").SEGMENTED_20, { } )

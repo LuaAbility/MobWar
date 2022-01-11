@@ -6,8 +6,8 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW014-damaged" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW014-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW014-damaged" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW014-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -28,10 +28,10 @@ function addEffect(player)
 	end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "ZOMBIFIED_PIGLIN" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -39,13 +39,13 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function damaged(event, ability, id)
+function damaged(LAPlayer, event, ability, id)
 	local damagee = event:getEntity()
 	local damager = event:getDamager()
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 	
 	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
-		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			damagee:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
 			damagee:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 600, 0}))
 			damagee:getWorld():spawnParticle(import("$.Particle").VILLAGER_ANGRY, damagee:getLocation():add(0,1,0), 20, 0.5, 1, 0.5, 0.05)

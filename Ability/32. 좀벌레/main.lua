@@ -5,7 +5,7 @@ end
 
 function onEvent(funcTable)
 	if funcTable[1] == "MW031-summonSilverFish" then summonSilverFish(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW031-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW031-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function summonSilverFish(player, event, ability, id)
@@ -14,7 +14,7 @@ function summonSilverFish(player, event, ability, id)
 	if event:getPlayer() ~= player:getPlayer() then
 		if (player:getPlayer():getLocation():distance(event:getPlayer():getLocation()) <= 25) then
 			if math.random(3) == 1 then
-				if game.checkCooldown(player, ability, id) then
+				if game.checkCooldown(player, player, ability, id) then
 					for i = 1, 4 do
 						local loc = event:getBlock():getLocation()
 						loc:setX(loc:getX() + 0.5)
@@ -33,10 +33,10 @@ function summonSilverFish(player, event, ability, id)
 	end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "SILVERFISH" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end

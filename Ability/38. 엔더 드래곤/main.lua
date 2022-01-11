@@ -6,8 +6,8 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW038-ability" then ability(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW038-cancelEffect" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelEffect(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW038-ability" then ability(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW038-cancelEffect" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelEffect(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -18,11 +18,11 @@ function onTimer(player, ability)
 	updateBossbar(player)
 end
 
-function ability(event, ability, id)
+function ability(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					local players = util.getTableFromList(game.getPlayers())
 					for i = 1, #players do
 						if players[i]:getPlayer() ~= event:getPlayer() then
@@ -52,7 +52,7 @@ function ability(event, ability, id)
 	if event:getAction():toString() == "LEFT_CLICK_AIR" or event:getAction():toString() == "LEFT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					local playerEye = event:getPlayer():getEyeLocation():getDirection()
 					local pos = event:getPlayer():getLocation()
 					pos:setX(pos:getX() + (playerEye:getX() * 1.5))
@@ -70,9 +70,9 @@ function ability(event, ability, id)
 	end
 end
 
-function cancelEffect(event, ability, id)
+function cancelEffect(LAPlayer, event, ability, id)
 	if (event:getDamager():getType():toString() == "DRAGON_FIREBALL" or event:getDamager():getType():toString() == "AREA_EFFECT_CLOUD") and event:getEntity():getType():toString() == "PLAYER" then
-		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			event:setCancelled(true)
 		end
 	end

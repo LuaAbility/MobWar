@@ -6,8 +6,8 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW037-changeStat" then changeStat(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW037-respawn" then respawn(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW037-changeStat" then changeStat(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW037-respawn" then respawn(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -17,17 +17,17 @@ function onTimer(player, ability)
 	end
 end
 
-function respawn(event, ability, id)
-	if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+function respawn(LAPlayer, event, ability, id)
+	if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 		rollStat(event:getPlayer())
 	end
 end
 
-function changeStat(event, ability, id)
+function changeStat(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "WHEAT") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					rollStat(event:getPlayer())
 				end
 			end

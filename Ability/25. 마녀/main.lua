@@ -8,15 +8,15 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW025-heal" then heal(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW025-harm" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then harm(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW025-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW025-heal" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW025-harm" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then harm(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW025-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
-function cancelTarget(event, ability, id)
+function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "WITCH" then
-			if game.checkCooldown(game.getPlayer(event:getTarget()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
 				event:setTarget(nil)
 				event:setCancelled(true)
 			end
@@ -24,12 +24,12 @@ function cancelTarget(event, ability, id)
 	end
 end
 
-function heal(event, ability, id)
+function heal(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		local arrow = {newInstance("$.inventory.ItemStack", { import("$.Material").ARROW, 1 }) }
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "GLASS_BOTTLE") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					local maxHealth = event:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getValue()
 					if (event:getPlayer():getHealth() + 8 >= maxHealth) then event:getPlayer():setHealth(maxHealth)
 					else event:getPlayer():setHealth(event:getPlayer():getHealth() + 8) end
@@ -41,11 +41,11 @@ function heal(event, ability, id)
 	end
 end
 
-function harm(event, ability, id)
+function harm(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
 		local item = { event:getDamager():getInventory():getItemInMainHand() }
 		if game.isAbilityItem(item[1], "GLASS_BOTTLE") then
-			if game.checkCooldown(game.getPlayer(event:getDamager()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				local randomData = math.random(3)
 				if randomData == 1 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SLOW, 300, 0})) end
 				if randomData == 2 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.POISON, 300, 0})) end

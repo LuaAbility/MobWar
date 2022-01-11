@@ -6,24 +6,24 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW002-panelty" then panelty(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW002-heal" then heal(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW002-panelty" then panelty(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW002-heal" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 	
 	
-function panelty(event, ability, id)
+function panelty(LAPlayer, event, ability, id)
 	if event:getItem():getType():toString() == "COOKED_MUTTON" or event:getItem():getType():toString() == "MUTTON" then
-		if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 			event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 100, 0}))
 		end
 	end
 end
 
-function heal(event, ability, id)
+function heal(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "CARROT_ON_A_STICK") then
-				if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					event:setCancelled(true)
 					event:getPlayer():setFoodLevel(event:getPlayer():getFoodLevel() + 4)
 					if (event:getPlayer():getFoodLevel() >= 20) then event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.REGENERATION, 100, 2}))

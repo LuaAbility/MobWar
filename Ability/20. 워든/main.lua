@@ -5,19 +5,19 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW020-track" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then track(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW020-track" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then track(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
 	addEffect(player)
 end
 
-function track(event, ability, id)
+function track(LAPlayer, event, ability, id)
 	if (event:getCause():toString() == "PROJECTILE" or event:getCause():toString() == "ENTITY_ATTACK") and event:getEntity():getType():toString() == "PLAYER" then
 		local damager = event:getDamager()
 		if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 		
-		if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
 			
 			for i = 0, 4 do 

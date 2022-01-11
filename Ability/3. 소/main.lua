@@ -6,8 +6,8 @@ function Init(abilityData)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW003-panelty" then panelty(funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW003-removeEffect" then removeEffect(funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW003-panelty" then panelty(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW003-removeEffect" then removeEffect(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)
@@ -17,19 +17,19 @@ function onTimer(player, ability)
 	player:setVariable("MW003-cowBlindness", count)
 end
 
-function panelty(event, ability, id)
+function panelty(LAPlayer, event, ability, id)
 	if event:getItem():getType():toString() == "COOKED_BEEF" or event:getItem():getType():toString() == "BEEF" then
-		if game.checkCooldown(game.getPlayer(event:getPlayer()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 			game.getPlayer(event:getPlayer()):setVariable("MW003-cowBlindness", 100)
 			event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 100, 0}))
 		end
 	end
 end
 
-function removeEffect(event, ability, id)
+function removeEffect(LAPlayer, event, ability, id)
 	if event:getAction():toString() ~= "CLEARED" and event:getAction():toString() ~= "REMOVED" and event:getEntity():getType():toString() == "PLAYER" then 
 		if isBadEffect(event:getNewEffect(), game.getPlayer(event:getEntity())) then
-			if game.checkCooldown(game.getPlayer(event:getEntity()), ability, id) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 				event:setCancelled(true)
 			end
 		end
