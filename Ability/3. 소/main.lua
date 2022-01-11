@@ -1,27 +1,51 @@
-function main(abilityData)
-	local cowBlindness = true
-	local effect = import("$.potion.PotionEffectType")
-		
-	plugin.registerEvent(abilityData, "PlayerItemConsumeEvent", 0, function(a, e)
-		if e:getItem():getType():toString() == "COOKED_BEEF" or e:getItem():getType():toString() == "BEEF" then
-			if game.checkCooldown(e:getPlayer(), a, 0) then
-				game.getPlayer(e:getPlayer()):setVariable("MW003-cowBlindness", "true")
-				e:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 100, 0}))
-				util.runLater(function() game.getPlayer(e:getPlayer()):setVariable("MW003-cowBlindness", "false") end, 100)
+local effect = import("$.potion.PotionEffectType")
+
+function Init(abilityData)
+	plugin.registerEvent(abilityData, "MW003-panelty", "PlayerItemConsumeEvent", 0)
+	plugin.registerEvent(abilityData, "MW003-removeEffect", "EntityPotionEffectEvent", 0)
+end
+
+function onEvent(funcTable)
+	if funcTable[1] == "MW003-panelty" then panelty(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW003-removeEffect" then removeEffect(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+end
+
+function onTimer(player, ability)
+	if player:getVariable("MW003-cowBlindness") == nil then player:setVariable("MW003-cowBlindness", 0) end
+	local count = player:getVariable("MW003-cowBlindness")
+	if count > 0 then count = count - 2 end
+	player:setVariable("MW003-cowBlindness", count)
+end
+
+function panelty(LAPlayer, event, ability, id)
+	if event:getItem():getType():toString() == "COOKED_BEEF" or event:getItem():getType():toString() == "BEEF" then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
+			game.getPlayer(event:getPlayer()):setVariable("MW003-cowBlindness", 100)
+			event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 100, 0}))
+		end
+	end
+end
+
+function removeEffect(LAPlayer, event, ability, id)
+	if event:getAction():toString() ~= "CLEARED" and event:getAction():toString() ~= "REMOVED" and event:getEntity():getType():toString() == "PLAYER" then 
+		if isBadEffect(event:getNewEffect(), game.getPlayer(event:getEntity())) then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
+				event:setCancelled(true)
 			end
 		end
-	end)
-	
-	plugin.addPassiveScript(abilityData, 1, function(p)
-		if (p:hasPotionEffect(effect.BLINDNESS) and game.getPlayer(p):getVariable("MW003-cowBlindness") == "false") then p:removePotionEffect(effect.BLINDNESS) end
-		if (p:hasPotionEffect(effect.CONFUSION)) then p:removePotionEffect(effect.CONFUSION) end
-		if (p:hasPotionEffect(effect.HUNGER)) then p:removePotionEffect(effect.HUNGER) end
-		if (p:hasPotionEffect(effect.LEVITATION)) then p:removePotionEffect(effect.LEVITATION) end
-		if (p:hasPotionEffect(effect.POISON)) then p:removePotionEffect(effect.POISON) end
-		if (p:hasPotionEffect(effect.SLOW)) then p:removePotionEffect(effect.SLOW) end
-		if (p:hasPotionEffect(effect.SLOW_DIGGING)) then p:removePotionEffect(effect.SLOW_DIGGING) end
-		if (p:hasPotionEffect(effect.UNLUCK)) then p:removePotionEffect(effect.UNLUCK) end
-		if (p:hasPotionEffect(effect.WEAKNESS)) then p:removePotionEffect(effect.WEAKNESS) end
-		if (p:hasPotionEffect(effect.WITHER)) then p:removePotionEffect(effect.WITHER) end
-	end)
+	end
+end
+
+function isBadEffect(targetEffect, player)
+	if (targetEffect:getType() == effect.BLINDNESS) and player:getVariable("MW003-cowBlindness") ~= nil and player:getVariable("MW003-cowBlindness") < 1 then return true end
+	if (targetEffect:getType() == effect.CONFUSION) then return true end
+	if (targetEffect:getType() == effect.HUNGER) then return true end
+	if (targetEffect:getType() == effect.LEVITATION) then return true end
+	if (targetEffect:getType() == effect.POISON) then return true end
+	if (targetEffect:getType() == effect.SLOW) then return true end
+	if (targetEffect:getType() == effect.SLOW_DIGGING) then return true end
+	if (targetEffect:getType() == effect.UNLUCK) then return true end
+	if (targetEffect:getType() == effect.WEAKNESS) then return true end
+	if (targetEffect:getType() == effect.WITHER) then return true end
+	return false
 end

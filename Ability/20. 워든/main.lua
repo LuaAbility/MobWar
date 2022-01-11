@@ -1,27 +1,37 @@
-function main(abilityData)
-	local effect = import("$.potion.PotionEffectType")
-	
-	plugin.registerEvent(abilityData, "EntityDamageByEntityEvent", 0, function(a, e)
-		if (e:getCause():toString() == "PROJECTILE" or e:getCause():toString() == "ENTITY_ATTACK") and e:getEntity():getType():toString() == "PLAYER" then
-			local damager = e:getDamager()
-			if e:getCause():toString() == "PROJECTILE" then damager = e:getDamager():getShooter() end
+local effect = import("$.potion.PotionEffectType")
+
+function Init(abilityData)
+	plugin.registerEvent(abilityData, "MW020-track", "EntityDamageEvent", 0)
+end
+
+function onEvent(funcTable)
+	if funcTable[1] == "MW020-track" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then track(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+end
+
+function onTimer(player, ability)
+	addEffect(player)
+end
+
+function track(LAPlayer, event, ability, id)
+	if (event:getCause():toString() == "PROJECTILE" or event:getCause():toString() == "ENTITY_ATTACK") and event:getEntity():getType():toString() == "PLAYER" then
+		local damager = event:getDamager()
+		if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
+		
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
+			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
 			
-			if game.checkCooldown(e:getEntity(), a, 0) then
-				e:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
-				
-				for i = 0, 4 do 
-					util.runLater(function() 
-						local vibration = newInstance("$.Vibration", { e:getEntity():getLocation(), newInstance("$.Vibration$Destination$EntityDestination", {damager}), 20})
-						e:getEntity():getWorld():spawnParticle(import("$.Particle").VIBRATION, e:getEntity():getEyeLocation(), 1, 0.5, 1, 0.5, 1, vibration)
-						e:getEntity():getWorld():playSound(e:getEntity():getLocation(), import("$.Sound").BLOCK_SCULK_SENSOR_CLICKING, 1, 0.3)
-					end, i * 20)
-				end
+			for i = 0, 4 do 
+				util.runLater(function() 
+					local vibration = newInstance("$.Vibration", { event:getEntity():getLocation(), newInstance("$.Vibration$Destination$EntityDestination", {damager}), 20})
+					event:getEntity():getWorld():spawnParticle(import("$.Particle").VIBRATION, event:getEntity():getEyeLocation(), 1, 0.5, 1, 0.5, 1, vibration)
+					event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").BLOCK_SCULK_SENSOR_CLICKING, 1, 0.3)
+				end, i * 20)
 			end
 		end
-	end)
-	
-	plugin.addPassiveScript(abilityData, 1, function(p)
-		p:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 40, 0}))
-		p:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 20, 0}))
-	end)
+	end
+end
+
+function addEffect(player)
+	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 40, 0}))
+	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 20, 0}))
 end

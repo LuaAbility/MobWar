@@ -1,12 +1,14 @@
-function main(abilityData)
-	local attribute = import("$.attribute.Attribute")
-	
-	plugin.addPassiveScript(abilityData, 0, function(p)
-		p:getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(40)
-		p:setHealth(40)
-	end)
-	
-	plugin.onPlayerEnd(abilityData, function(p)
-		p:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(p:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getDefaultValue())
-	end)
+local attribute = import("$.attribute.Attribute")
+
+function Init(abilityData) end
+
+function onTimer(player, ability)
+	if player:getVariable("MW026-isEnable") ~= true then 
+		player:setVariable("MW026-isEnable", true) 
+		player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getDefaultValue() * 2)
+	end
+end
+
+function Reset(player, ability)
+	player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getDefaultValue())
 end

@@ -1,49 +1,45 @@
-function main(abilityData)
-	local effect = import("$.potion.PotionEffectType")
+function Init(abilityData)
+	plugin.registerEvent(abilityData, "MW031-summonSilverFish", "BlockBreakEvent", 300)
+	plugin.registerEvent(abilityData, "MW031-cancelTarget", "EntityTargetEvent", 0)
+end
+
+function onEvent(funcTable)
+	if funcTable[1] == "MW031-summonSilverFish" then summonSilverFish(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "MW031-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+end
+
+function summonSilverFish(player, event, ability, id)
+	local players = util.getTableFromList(game.getPlayers())
 	
-	plugin.registerEvent(abilityData, "BlockBreakEvent", 300, function(a, e)
-		local players = util.getTableFromList(game.getPlayers())
-		local player = { }
-		for i = 1, #players do
-			if players[i]:hasAbility("LA-MW-032") then table.insert(player, players[i]) end
-		end
-		
-		
-		if #player > 0 then
-			for i = 1, #player do
-				if e:getPlayer() ~= player[i]:getPlayer() then
-					if (player[i]:getPlayer():getLocation():distance(e:getPlayer():getLocation()) <= 25) then
+	if event:getPlayer() ~= player:getPlayer() then
+		if (player:getPlayer():getLocation():distance(event:getPlayer():getLocation()) <= 25) then
+			if math.random(3) == 1 then
+				if game.checkCooldown(player, player, ability, id) then
+					for i = 1, 4 do
+						local loc = event:getBlock():getLocation()
+						loc:setX(loc:getX() + 0.5)
+						loc:setZ(loc:getZ() + 0.5)
+						local silverfish = event:getPlayer():getWorld():spawnEntity(loc, import("$.entity.EntityType").SILVERFISH)
+						silverfish:setTarget(event:getPlayer())
 						
-						if math.random(3) == 1 then
-							if game.checkCooldown(player[i]:getPlayer(), a, 0) then
-								for i = 1, 4 do
-									local loc = e:getBlock():getLocation()
-									loc:setX(loc:getX() + 0.5)
-									loc:setZ(loc:getZ() + 0.5)
-									local silverfish = e:getPlayer():getWorld():spawnEntity(loc, import("$.entity.EntityType").SILVERFISH)
-									silverfish:setTarget(e:getPlayer())
-									
-									util.runLater(function() 
-										if silverfish:isValid() then silverfish:remove() end
-									end, 600)
-								end
-								game.sendMessage(e:getPlayer(), "§7좀벌레가 나타났습니다.")
-							end
-						end
+						util.runLater(function() 
+							if silverfish:isValid() then silverfish:remove() end
+						end, 600)
 					end
+					game.sendMessage(event:getPlayer(), "§7좀벌레가 나타났습니다.")
 				end
 			end
 		end
-	end)
-	
-	plugin.registerEvent(abilityData, "EntityTargetLivingEntityEvent", 0, function(a, e)
-		if e:getTarget() ~= nil and e:getEntity() ~= nil then
-			if e:getTarget():getType():toString() == "PLAYER" and e:getEntity():getType():toString() == "SILVERFISH" then
-				if game.checkCooldown(e:getTarget(), a, 1) then
-					e:setTarget(nil)
-					e:setCancelled(true)
-				end
+	end
+end
+
+function cancelTarget(LAPlayer, event, ability, id)
+	if event:getTarget() ~= nil and event:getEntity() ~= nil then
+		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "SILVERFISH" then
+			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
+				event:setTarget(nil)
+				event:setCancelled(true)
 			end
 		end
-	end)
+	end
 end

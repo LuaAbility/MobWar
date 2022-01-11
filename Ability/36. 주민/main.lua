@@ -1,44 +1,49 @@
-function main(abilityData)
-	plugin.registerEvent(abilityData, "PlayerInteractEvent", 200, function(a, e)
-		if e:getAction():toString() == "RIGHT_CLICK_AIR" or e:getAction():toString() == "RIGHT_CLICK_BLOCK" then
-			if e:getItem() ~= nil then
-				if game.isAbilityItem(e:getItem(), "EMERALD") then
-					if game.checkCooldown(e:getPlayer(), a, 0) then
-						e:setCancelled(true)
-						local itemStack = { newInstance("$.inventory.ItemStack", {e:getMaterial(), 1}) }
-						e:getPlayer():getInventory():removeItem(itemStack)
-						local abilityUse = tonumber(game.getPlayer(e:getPlayer()):getVariable("MW036-abilityUse"))
-						if abilityUse < 2 then levelOne(e:getPlayer())
-						elseif abilityUse < 4 then levelTwo(e:getPlayer())
-						elseif abilityUse < 6 then levelThree(e:getPlayer())
-						elseif abilityUse < 8 then levelFour(e:getPlayer())
-						else levelFive(e:getPlayer()) end
-						
-						abilityUse = abilityUse + 1
-						
-						if abilityUse == 2 then game.sendMessage(e:getPlayer(), "§6[§e주민§6] §7수습생§e이 되었습니다. 다음 능력 발동부터 적용됩니다.") end
-						if abilityUse == 4 then game.sendMessage(e:getPlayer(), "§6[§e주민§6] §6기능공§e이 되었습니다. 다음 능력 발동부터 적용됩니다.") end
-						if abilityUse == 6 then game.sendMessage(e:getPlayer(), "§6[§e주민§6] §a전문가§e가 되었습니다. 다음 능력 발동부터 적용됩니다.") end
-						if abilityUse == 8 then game.sendMessage(e:getPlayer(), "§6[§e주민§6] §b달인§e이 되었습니다. 다음 능력 발동부터 적용됩니다.") end
-						
-						e:getPlayer():getWorld():spawnParticle(import("$.Particle").VILLAGER_HAPPY, e:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05)
-						e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_VILLAGER_YES, 0.25, 1)
-						
-						game.getPlayer(e:getPlayer()):setVariable("MW036-abilityUse", tostring(abilityUse))
-					end
+function Init(abilityData)
+	plugin.registerEvent(abilityData, "MW036-trade", "PlayerInteractEvent", 200)
+end
+
+function onEvent(funcTable)
+	if funcTable[1] == "MW036-trade" then trade(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+end
+
+function onTimer(player, ability)
+	if player:getVariable("MW036-abilityUse") == nil then player:setVariable("MW036-abilityUse", 0) end
+end
+
+function trade(LAPlayer, event, ability, id)
+	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
+		if event:getItem() ~= nil then
+			if game.isAbilityItem(event:getItem(), "EMERALD") then
+				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
+					event:setCancelled(true)
+					local itemStack = { newInstance("$.inventory.ItemStack", {event:getMaterial(), 1}) }
+					event:getPlayer():getInventory():removeItem(itemStack)
+					local abilityUse = game.getPlayer(event:getPlayer()):getVariable("MW036-abilityUse")
+					if abilityUse < 2 then levelOne(event:getPlayer())
+					elseif abilityUse < 4 then levelTwo(event:getPlayer())
+					elseif abilityUse < 6 then levelThree(event:getPlayer())
+					elseif abilityUse < 8 then levelFour(event:getPlayer())
+					else levelFive(event:getPlayer()) end
+					
+					abilityUse = abilityUse + 1
+					
+					if abilityUse == 2 then game.sendMessage(event:getPlayer(), "§6[§e주민§6] §7수습생§e이 되었습니다. 다음 능력 발동부터 적용됩니다.") end
+					if abilityUse == 4 then game.sendMessage(event:getPlayer(), "§6[§e주민§6] §6기능공§e이 되었습니다. 다음 능력 발동부터 적용됩니다.") end
+					if abilityUse == 6 then game.sendMessage(event:getPlayer(), "§6[§e주민§6] §a전문가§e가 되었습니다. 다음 능력 발동부터 적용됩니다.") end
+					if abilityUse == 8 then game.sendMessage(event:getPlayer(), "§6[§e주민§6] §b달인§e이 되었습니다. 다음 능력 발동부터 적용됩니다.") end
+					
+					event:getPlayer():getWorld():spawnParticle(import("$.Particle").VILLAGER_HAPPY, event:getPlayer():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05)
+					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_VILLAGER_YES, 0.25, 1)
+					
+					game.getPlayer(event:getPlayer()):setVariable("MW036-abilityUse", abilityUse)
 				end
 			end
 		end
-	end)
-	
-	plugin.addPassiveScript(abilityData, 0, function(p)
-		game.getPlayer(p):setVariable("MW036-abilityUse", "0")
-	end)
+	end
 end
 
 
 function levelOne(player)
-	
 	local randomNumber = math.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BREAD, math.random(3, 6)})
