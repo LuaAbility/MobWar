@@ -1,6 +1,7 @@
 local material = import("$.Material") -- 건들면 안됨!
 local godModeTick = 6000 -- 무적 시간 (틱)
 
+local giveItemOnSpawn = true -- 시작 / 스폰 시 기본 아이템 지급
 local startX = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 local startY = 80 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 local startZ = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
@@ -22,7 +23,7 @@ function Init()
 	plugin.getPlugin().gameManager:setVariable("isGodMode", false)
 	plugin.getPlugin().gameManager:setVariable("worldBorder", nil)
 	
-	plugin.skipInformationOption(true) -- 모든 게임 시작과정을 생략하고 게임을 시작할 지 정합니다.
+	plugin.skipInformationOption(false) -- 모든 게임 시작과정을 생략하고 게임을 시작할 지 정합니다.
 	plugin.raffleAbilityOption(true) -- 시작 시 능력을 추첨할 지 결정합니다.
 	plugin.skipYesOrNoOption(false) -- 플레이어에게 능력 재설정을 가능하게 할 것인지 정합니다.
 	plugin.abilityAmountOption(1, false) -- 능력의 추첨 옵션입니다. 숫자로 능력의 추첨 개수를 정하고, true/false로 다른 플레이어와 능력이 중복될 수 있는지를 정합니다. 같은 플레이어에게는 중복된 능력이 적용되지 않습니다.
@@ -52,7 +53,7 @@ function onTimer()
 		teleport()
 		heal()
 		changeGamemode()
-		giveItemToAll(true)
+		if (giveItemOnSpawn) then giveItemToAll(true) end
 		setWorldBorder()
 	end
 
@@ -127,7 +128,7 @@ function giveItem(player, clearInv)
 	if game.getPlayer(player).isSurvive then 
 		game.sendMessage(player, "§2[§aLAbility§2] §a기본 아이템을 지급받습니다.")
 		if clearInv then player:getInventory():clear() end -- 인벤토리 초기화 
-		--player:getInventory():addItem(startItem) -- 아이템 지급
+		player:getInventory():addItem(startItem) -- 아이템 지급
 	end
 end
 
@@ -167,11 +168,9 @@ function Reset()
 		border:setCenter(0, 0)
 	end
 
-	util.runLater(function ()
-		local bossbars = util.getTableFromList(plugin.getServer():getBossBars())
-		for i = 1, #bossbars do
-			plugin.getServer():getBossBar(bossbars[i]:getKey()):setVisible(false)
-			plugin.getServer():removeBossBar(bossbars[i]:getKey())
-		end
-	end, 2)
+	local bossbars = util.getTableFromList(plugin.getServer():getBossBars())
+	for i = 1, #bossbars do
+		plugin.getServer():getBossBar(bossbars[i]:getKey()):setVisible(false)
+		plugin.getServer():removeBossBar(bossbars[i]:getKey())
+	end
 end
