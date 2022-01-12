@@ -8,6 +8,7 @@ end
 
 function steal(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
+		math.randomseed(os.time())
 		local randomData = math.random(100)
 		if randomData <= 15 then
 			local item = { event:getEntity():getInventory():getItemInMainHand() }

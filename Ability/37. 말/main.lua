@@ -36,6 +36,7 @@ function changeStat(LAPlayer, event, ability, id)
 end
 
 function rollStat(player)
+	math.randomseed(os.time())
 	local healthStat = math.random(15, 30)
 	local speedStat = math.random(2500, 5000)
 	

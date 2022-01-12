@@ -42,6 +42,7 @@ function checkAbility(LAPlayer, event, ability, id)
 end
 
 function changeType(player)
+	math.randomseed(os.time())
 	if math.random(2) == 1 then
 		player:setVariable("MW034-playerType", "동물")
 		game.sendMessage(player:getPlayer(), "§2[§a박쥐§2] §a능력 타입이 §2동물§a이 되었습니다.")

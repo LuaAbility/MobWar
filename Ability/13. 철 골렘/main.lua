@@ -15,6 +15,7 @@ end
 
 function throw(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
+		math.randomseed(os.time())
 		if math.random() <= 0.2 then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				event:getEntity():damage(event:getDamage(), event:getDamager())
