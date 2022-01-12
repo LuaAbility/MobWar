@@ -90,6 +90,8 @@ function teleport(player, block)
 	blockLoc:setZ(targetVec:getZ() + 0.5)
 	blockLoc:setPitch(playerLoc:getPitch())
 	blockLoc:setYaw(playerLoc:getYaw())
+	
+	player:teleport(blockLoc)
 end
 
 function checkMat(mat)
