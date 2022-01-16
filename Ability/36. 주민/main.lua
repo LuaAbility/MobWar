@@ -45,22 +45,22 @@ end
 
 function levelOne(player)
 	math.randomseed(os.time())
-	local randomNumber = math.random(3)
+	local randomNumber = util.random(3)
 	if randomNumber == 1 then
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BREAD, math.random(3, 6)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BREAD, util.random(3, 6)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	elseif randomNumber == 2 then
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").ARROW, math.random(3, 16)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").ARROW, util.random(3, 16)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	else
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").IRON_INGOT, math.random(3, 10)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").IRON_INGOT, util.random(3, 10)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	end
 end
 
 function levelTwo(player)
 	math.randomseed(os.time())
-	local randomNumber = math.random(3)
+	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BOW, 1})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
@@ -71,7 +71,7 @@ function levelTwo(player)
 		itemStack:setItemMeta(itemMeta)
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	else
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").LAPIS_LAZULI, math.random(5, 10)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").LAPIS_LAZULI, util.random(5, 10)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	end
 end
@@ -79,15 +79,15 @@ end
 
 function levelThree(player)
 	math.randomseed(os.time())
-	local randomNumber = math.random(3)
+	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").CROSSBOW, 1})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	elseif randomNumber == 2 then
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").ENDER_PEARL, math.random(3, 6)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").ENDER_PEARL, util.random(3, 6)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	else
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BOOKSHELF, math.random(6, 12)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BOOKSHELF, util.random(6, 12)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	end
 end
@@ -95,15 +95,15 @@ end
 
 function levelFour(player)
 	math.randomseed(os.time())
-	local randomNumber = math.random(3)
+	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").ENCHANTING_TABLE, 1})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	elseif randomNumber == 2 then
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").EXPERIENCE_BOTTLE, math.random(10, 20)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").EXPERIENCE_BOTTLE, util.random(10, 20)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	else
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").GOLDEN_APPLE, math.random(1, 3)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").GOLDEN_APPLE, util.random(1, 3)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	end
 end
@@ -111,9 +111,9 @@ end
 
 function levelFive(player)
 	math.randomseed(os.time())
-	local randomNumber = math.random(3)
+	local randomNumber = util.random(3)
 	if randomNumber == 1 then
-		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").DIAMOND, math.random(6, 15)})
+		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").DIAMOND, util.random(6, 15)})
 		player:getWorld():dropItemNaturally(player:getLocation(), itemStack)
 	elseif randomNumber == 2 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").ENCHANTED_GOLDEN_APPLE, 1})

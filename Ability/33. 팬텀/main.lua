@@ -61,7 +61,7 @@ function phantom(p, damager)
 	local attribute = import("$.attribute.Attribute").
 	math.randomseed(os.time())
 	
-	if math.random(10) <= 2 then
+	if util.random(10) <= 2 then
 		local currentTime = p:getWorld():getTime() % 24000
 		local newHealth = p:getHealth() + 4
 		if newHealth > p:getAttribute(attribute.GENERIC_MAX_HEALTH):getValue() then newHealth = p:getAttribute(attribute.GENERIC_MAX_HEALTH):getValue() end

@@ -14,7 +14,7 @@ function summonSilverFish(player, event, ability, id)
 	if event:getPlayer() ~= player:getPlayer() then
 		if (player:getPlayer():getLocation():distance(event:getPlayer():getLocation()) <= 25) then
 			math.randomseed(os.time())
-			if math.random(3) == 1 then
+			if util.random(3) == 1 then
 				if game.checkCooldown(player, player, ability, id) then
 					for i = 1, 4 do
 						local loc = event:getBlock():getLocation()

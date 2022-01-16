@@ -43,7 +43,7 @@ end
 
 function changeType(player)
 	math.randomseed(os.time())
-	if math.random(2) == 1 then
+	if util.random(2) == 1 then
 		player:setVariable("MW034-playerType", "동물")
 		game.sendMessage(player:getPlayer(), "§2[§a박쥐§2] §a능력 타입이 §2동물§a이 되었습니다.")
 		game.sendMessage(player:getPlayer(), "§2[§a박쥐§2] §a동물 능력자에게는 데미지를 입지 않습니다.")

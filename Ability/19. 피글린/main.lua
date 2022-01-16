@@ -47,7 +47,7 @@ function giveItem(LAPlayer, event, ability, id)
 					event:getPlayer():getInventory():removeItem(itemStack)
 					
 					
-					local randomNumber = math.random(100)
+					local randomNumber = util.random(100)
 					if randomNumber <= 1 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.END_CRYSTAL, 1})
 						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
@@ -58,7 +58,7 @@ function giveItem(LAPlayer, event, ability, id)
 						itemStack:setItemMeta(itemMeta)
 						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
 					elseif randomNumber <= 20 then
-						local itemStack = newInstance("$.inventory.ItemStack", {material.DIAMOND, math.random(5)})
+						local itemStack = newInstance("$.inventory.ItemStack", {material.DIAMOND, util.random(5)})
 						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
 					elseif randomNumber <= 30 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.POTION, 1})
@@ -69,13 +69,13 @@ function giveItem(LAPlayer, event, ability, id)
 						itemStack:setItemMeta(itemMeta)
 						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
 					elseif randomNumber <= 50 then
-						local itemStack = newInstance("$.inventory.ItemStack", {material.ENDER_PEARL, math.random(5)})
+						local itemStack = newInstance("$.inventory.ItemStack", {material.ENDER_PEARL, util.random(5)})
 						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
 					elseif randomNumber <= 70 then
-						local itemStack = newInstance("$.inventory.ItemStack", {material.ARROW, math.random(6, 12)})
+						local itemStack = newInstance("$.inventory.ItemStack", {material.ARROW, util.random(6, 12)})
 						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
 					else
-						local itemStack = newInstance("$.inventory.ItemStack", {material.IRON_INGOT, math.random(3, 15)})
+						local itemStack = newInstance("$.inventory.ItemStack", {material.IRON_INGOT, util.random(3, 15)})
 						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
 					end
 					event:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, event:getPlayer():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)

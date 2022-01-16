@@ -37,8 +37,8 @@ end
 
 function rollStat(player)
 	math.randomseed(os.time())
-	local healthStat = math.random(15, 30)
-	local speedStat = math.random(2500, 5000)
+	local healthStat = util.random(15, 30)
+	local speedStat = util.random(2500, 5000)
 	
 	player:getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(healthStat)
 	player:setWalkSpeed(speedStat / 10000.0)

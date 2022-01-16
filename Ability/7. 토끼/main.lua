@@ -37,7 +37,7 @@ function damaged(LAPlayer, event, ability, id)
 	
 	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 		math.randomseed(os.time())
-		if math.random(100) <= 10 and game.getPlayer(damagee):getVariable("MW007-redrum") ~= true then 
+		if util.random(100) <= 10 and game.getPlayer(damagee):getVariable("MW007-redrum") ~= true then 
 			if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then
 				game.getPlayer(damagee):setVariable("MW007-redrum", true)
 				damagee:getWorld():spawnParticle(import("$.Particle").REDSTONE, damagee:getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))

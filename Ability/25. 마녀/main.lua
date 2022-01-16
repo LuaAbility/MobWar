@@ -47,7 +47,7 @@ function harm(LAPlayer, event, ability, id)
 		if game.isAbilityItem(item[1], "GLASS_BOTTLE") then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				math.randomseed(os.time())
-				local randomData = math.random(3)
+				local randomData = util.random(3)
 				if randomData == 1 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SLOW, 300, 0})) end
 				if randomData == 2 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.POISON, 300, 0})) end
 				if randomData == 3 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.WEAKNESS, 300, 0})) end
