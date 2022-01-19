@@ -54,7 +54,8 @@ function ability(LAPlayer, event, ability, id)
 					local players = util.getTableFromList(game.getPlayers())
 					for i = 1, #players do
 						if players[i]:getPlayer() ~= event:getPlayer() then
-							if (event:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
+							if event:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
+							(event:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
 								local pos = event:getPlayer():getEyeLocation()
 								pos:setY(pos:getY() + 2)
 								

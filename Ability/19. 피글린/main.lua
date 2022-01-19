@@ -41,7 +41,6 @@ function giveItem(LAPlayer, event, ability, id)
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "GOLD_INGOT") then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
-					math.randomseed(os.time())
 					event:setCancelled(true)
 					local itemStack = { newInstance("$.inventory.ItemStack", {event:getMaterial(), 1}) }
 					event:getPlayer():getInventory():removeItem(itemStack)

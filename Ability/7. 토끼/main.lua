@@ -36,7 +36,7 @@ function damaged(LAPlayer, event, ability, id)
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 	
 	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
-		math.randomseed(os.time())
+		
 		if util.random(100) <= 10 and game.getPlayer(damagee):getVariable("MW007-redrum") ~= true then 
 			if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then
 				game.getPlayer(damagee):setVariable("MW007-redrum", true)

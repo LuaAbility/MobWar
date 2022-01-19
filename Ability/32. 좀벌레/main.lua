@@ -12,8 +12,8 @@ function summonSilverFish(player, event, ability, id)
 	local players = util.getTableFromList(game.getPlayers())
 	
 	if event:getPlayer() ~= player:getPlayer() then
-		if (player:getPlayer():getLocation():distance(event:getPlayer():getLocation()) <= 25) then
-			math.randomseed(os.time())
+		if player:getPlayer():getWorld():getEnvironment() == event:getPlayer():getPlayer():getWorld():getEnvironment() and
+		(player:getPlayer():getLocation():distance(event:getPlayer():getLocation()) <= 25) then
 			if util.random(3) == 1 then
 				if game.checkCooldown(player, player, ability, id) then
 					for i = 1, 4 do

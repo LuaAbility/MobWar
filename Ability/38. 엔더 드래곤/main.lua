@@ -26,7 +26,8 @@ function ability(LAPlayer, event, ability, id)
 					local players = util.getTableFromList(game.getPlayers())
 					for i = 1, #players do
 						if players[i]:getPlayer() ~= event:getPlayer() then
-							if (event:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 5) then
+							if event:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
+							(event:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 5) then
 								players[i]:getPlayer():damage(7, event:getPlayer())
 								local velocity = event:getPlayer():getLocation()
 								local dPos = newInstance("$.util.Vector", { velocity:getX() - players[i]:getPlayer():getLocation():getX(), velocity:getY() - players[i]:getPlayer():getLocation():getY(), velocity:getZ() - players[i]:getPlayer():getLocation():getZ() })

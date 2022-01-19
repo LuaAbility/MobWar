@@ -29,7 +29,7 @@ function getBedItem(LAPlayer, event, ability, id)
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "BED") and event:getItem():toString() ~= "BEDROCK" then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
-					math.randomseed(os.time())
+					
 					event:setCancelled(true)
 					
 					local randomNumber = util.random(100)

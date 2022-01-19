@@ -59,7 +59,6 @@ end
 
 function phantom(p, damager)
 	local attribute = import("$.attribute.Attribute").
-	math.randomseed(os.time())
 	
 	if util.random(10) <= 2 then
 		local currentTime = p:getWorld():getTime() % 24000

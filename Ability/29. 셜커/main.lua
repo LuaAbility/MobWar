@@ -55,8 +55,8 @@ function Shoot(player)
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
 		if players[i] ~= player then
-			if (player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
-				print(player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()))
+			if player:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
+			(player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
 				local pos = player:getPlayer():getLocation()
 				pos:setY(pos:getY() + 1)
 				local bullet = player:getPlayer():getWorld():spawnEntity(pos, import("$.entity.EntityType").SHULKER_BULLET)

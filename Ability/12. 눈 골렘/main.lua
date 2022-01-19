@@ -23,7 +23,8 @@ function freeze(player)
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
 		if players[i] ~= player then
-			if (player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
+			if player:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
+			(player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
 				players[i]:getPlayer():setFreezeTicks(300)
 			end
 		end

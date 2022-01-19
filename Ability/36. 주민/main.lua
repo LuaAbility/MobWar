@@ -44,7 +44,7 @@ end
 
 
 function levelOne(player)
-	math.randomseed(os.time())
+	
 	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BREAD, util.random(3, 6)})
@@ -59,7 +59,7 @@ function levelOne(player)
 end
 
 function levelTwo(player)
-	math.randomseed(os.time())
+	
 	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").BOW, 1})
@@ -78,7 +78,7 @@ end
 
 
 function levelThree(player)
-	math.randomseed(os.time())
+	
 	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").CROSSBOW, 1})
@@ -94,7 +94,7 @@ end
 
 
 function levelFour(player)
-	math.randomseed(os.time())
+	
 	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").ENCHANTING_TABLE, 1})
@@ -110,7 +110,7 @@ end
 
 
 function levelFive(player)
-	math.randomseed(os.time())
+	
 	local randomNumber = util.random(3)
 	if randomNumber == 1 then
 		local itemStack = newInstance("$.inventory.ItemStack", {import("$.Material").DIAMOND, util.random(6, 15)})

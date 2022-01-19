@@ -46,7 +46,8 @@ function rushPassive(player)
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
 		if players[i]:getPlayer() ~= player:getPlayer() then
-			if (player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 3) then
+			if player:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
+			(player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 3) then
 				local vector = player:getPlayer():getEyeLocation():getDirection()
 				vector:setX(vector:getX() * 6.0)
 				vector:setY(0.3)
