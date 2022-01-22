@@ -58,7 +58,7 @@ function passiveAbility(player)
 end
 
 function phantom(p, damager)
-	local attribute = import("$.attribute.Attribute").
+	local attribute = import("$.attribute.Attribute")
 	
 	if util.random(10) <= 2 then
 		local currentTime = p:getWorld():getTime() % 24000
