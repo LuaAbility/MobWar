@@ -1,21 +1,27 @@
 local material = import("$.Material") -- 건들면 안됨!
-local godModeTick = 6000 -- 무적 시간 (틱)
+local godModeTick = 3600 -- 무적 시간 (틱)
 
-local infinityFoodLevel = false -- 배고픔 무한 모드 
+local infinityFoodLevel = true -- 배고픔 무한 모드 
 local giveItemOnSpawn = true -- 시작 / 스폰 시 기본 아이템 지급
 local startX = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 local startY = 256 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 local startZ = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 
-local startBorderSize = 10000.0 -- 시작 시 월드 보더의 크기
+local startBorderSize = 5000.0 -- 시작 시 월드 보더의 크기
 local endBorderSize = 100.0 -- 마지막 월드 보더의 크기
-local borderChangeSecond = 120 -- 월드보더의 크기가 변화하는 시간
-local endBorderTick = 24000 -- 월드보더 크기 축소 시작 시간 (틱)
+local borderChangeSecond = 600 -- 월드보더의 크기가 변화하는 시간
+local endBorderTick = 18000 -- 월드보더 크기 축소 시작 시간 (틱)
 	
+local abilityItem = material.IRON_INGOT -- 능력 시전 아이템
+local startExp = 500
 local startItem = {  -- 시작 시 지급 아이템
-	newInstance("$.inventory.ItemStack", {material.IRON_SWORD, 1}) 
-	,newInstance("$.inventory.ItemStack", {material.IRON_INGOT, 64})
-	-- ,newInstance("$.inventory.ItemStack", {material.[아이템 이름(영어)], [아이템 개수]})
+	newInstance("$.inventory.ItemStack", {material.WATER_BUCKET, 3}),
+	newInstance("$.inventory.ItemStack", {material.BOOKSHELF, 64}),
+	newInstance("$.inventory.ItemStack", {material.LAPIS_LAZULI, 64}),
+	newInstance("$.inventory.ItemStack", {material.IRON_INGOT, 128}),
+	newInstance("$.inventory.ItemStack", {material.OAK_LOG, 64}),
+	newInstance("$.inventory.ItemStack", {material.ENCHANTING_TABLE, 1})
+	-- newInstance("$.inventory.ItemStack", {material.[아이템 이름(영어)], [아이템 개수]})
 }
 
 function Init()
@@ -29,7 +35,7 @@ function Init()
 	plugin.raffleAbilityOption(true) -- 시작 시 능력을 추첨할 지 결정합니다.
 	plugin.skipYesOrNoOption(false) -- 플레이어에게 능력 재설정을 가능하게 할 것인지 정합니다. true : 능력 재설정 불가 / false : 능력 재설정 가능
 	plugin.abilityAmountOption(1, false) -- 능력의 추첨 옵션입니다. 숫자로 능력의 추첨 개수를 정하고, true/false로 다른 플레이어와 능력이 중복될 수 있는지를 정합니다. 같은 플레이어에게는 중복된 능력이 적용되지 않습니다.
-	plugin.abilityItemOption(false, material.IRON_INGOT) -- 능력 발동 아이템 옵션입니다. true/false로 모든 능력의 발동 아이템을 통일 할 것인지 정하고, Material을 통해 통일할 아이템을 설정합니다.
+	plugin.abilityItemOption(true, abilityItem) -- 능력 발동 아이템 옵션입니다. true/false로 모든 능력의 발동 아이템을 통일 할 것인지 정하고, Material을 통해 통일할 아이템을 설정합니다.
 	plugin.abilityCheckOption(true) -- 능력 확인 옵션입니다. 플레이어가 자신의 능력을 확인할 수 있는 지 정합니다.
 	plugin.cooldownMultiplyOption(1.0) -- 능력 쿨타임 옵션입니다. 해당 값만큼 쿨타임 값에 곱해져 적용됩니다. (예: 0.5일 경우 쿨타임이 기본 쿨타임의 50%, 2.0일 경우 쿨타임이 기본 쿨타임의 200%)
 
@@ -67,15 +73,27 @@ function onTimer()
 end
 
 function setGodMode(enable)
+	local players = util.getTableFromList(game.getPlayers())
 	if enable then
+		for i = 1, #players do
+			player:getInventory():clear()
+			players[i]:getPlayer():teleport(newInstance("$.Location", { players[i]:getPlayer():getWorld(), startX, startY, startZ }) )
+			players[i]:setVariable("abilityLock", true)
+		end
 		plugin.getPlugin().gameManager:setVariable("isGodMode", true)
 		game.broadcastMessage("§6[§eLAbility§6] §e게임 시작 후 ".. (godModeTick / 20.0) .. "초 간 무적으로 진행됩니다.")
 	else
+		for i = 1, #players do
+			player:getInventory():clear()
+			players[i]:getPlayer():teleport(newInstance("$.Location", { players[i]:getPlayer():getWorld(), startX, startY, startZ }) )
+			players[i]:setVariable("abilityLock", false)
+		end
 		plugin.getPlugin().gameManager:setVariable("isGodMode", false)
 		game.broadcastMessage("§4[§cLAbility§4] §c무적시간이 종료되었습니다. 이제 데미지를 입습니다.")
+		game.broadcastMessage("§1[§bLAbility§1] §b이제 능력 사용이 가능합니다.")
+		game.broadcastMessage("§1[§bLAbility§1] §b능력 사용은 " .. abilityItem:toString() .. "으로 사용 가능합니다.")
 	end	
 end
-
 function teleport()
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
@@ -95,7 +113,6 @@ function heal()
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
 		players[i]:getPlayer():setHealth(players[i]:getPlayer():getAttribute(import("$.attribute.Attribute").GENERIC_MAX_HEALTH):getBaseValue())
-		players[i]:getPlayer():setFoodLevel(20)
 	end
 end
 
@@ -141,6 +158,8 @@ function giveItem(player, clearInv)
 		game.sendMessage(player, "§2[§aLAbility§2] §a기본 아이템을 지급받습니다.")
 		if clearInv then player:getInventory():clear() end -- 인벤토리 초기화 
 		player:getInventory():addItem(startItem) -- 아이템 지급
+		player:giveExpLevels(-9999999)
+		player:giveExpLevels(startExp) -- 경험치 지급
 	end
 end
 
