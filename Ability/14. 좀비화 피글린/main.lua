@@ -45,7 +45,7 @@ function damaged(LAPlayer, event, ability, id)
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 	
 	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
-		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id, false) then
 			damagee:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
 			damagee:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 600, 0}))
 			damagee:getWorld():spawnParticle(import("$.Particle").VILLAGER_ANGRY, damagee:getLocation():add(0,1,0), 20, 0.5, 1, 0.5, 0.05)

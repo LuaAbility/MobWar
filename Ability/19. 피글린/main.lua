@@ -4,7 +4,7 @@ local color = import("$.Color")
 
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW019-giveItem", "PlayerInteractEvent", 400)
-	plugin.registerEvent(abilityData, "MW019-goldDamage", "EntityDamageEvent", 2000)
+	plugin.registerEvent(abilityData, "MW019-goldDamage", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW019-cancelTarget", "EntityTargetEvent", 0)
 end
 

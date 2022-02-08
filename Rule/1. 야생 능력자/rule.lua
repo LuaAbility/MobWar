@@ -1,14 +1,14 @@
 local material = import("$.Material") -- 건들면 안됨!
-local godModeTick = 12000 -- 무적 시간 (틱)
+local godModeTick = 6000 -- 무적 시간 (틱)
 
 local startX = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 local startY = 256 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 local startZ = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 
-local startBorderSize = 5000.0 -- 시작 시 월드 보더의 크기
-local endBorderSize = 100.0 -- 마지막 월드 보더의 크기
+local startBorderSize = 2000.0 -- 시작 시 월드 보더의 크기
+local endBorderSize = 50.0 -- 마지막 월드 보더의 크기
 local borderChangeSecond = 600 -- 월드보더의 크기가 변화하는 시간
-local endBorderTick = 36000 -- 월드보더 크기 축소 시작 시간 (틱)
+local endBorderTick = 18000 -- 월드보더 크기 축소 시작 시간 (틱)
 
 function Init()
 	math.randomseed(os.time()) -- 건들면 안됨!
@@ -30,7 +30,7 @@ function Init()
 end
 
 function onEvent(funcID, event)
-	if funcID == "eliminate" then eliminate(event) end
+	-- if funcID == "eliminate" then eliminate(event) end
 	if funcID == "godMode" and plugin.getPlugin().gameManager:getVariable("isGodMode") then cancelDamage(event) end
 end
 
@@ -60,16 +60,12 @@ function setGodMode(enable)
 	local players = util.getTableFromList(game.getPlayers())
 	if enable then
 		for i = 1, #players do
-			player:getInventory():clear()
-			players[i]:getPlayer():teleport(newInstance("$.Location", { players[i]:getPlayer():getWorld(), startX, startY, startZ }) )
 			players[i]:setVariable("abilityLock", true)
 		end
 		plugin.getPlugin().gameManager:setVariable("isGodMode", true)
 		game.broadcastMessage("§6[§eLAbility§6] §e게임 시작 후 ".. (godModeTick / 20.0) .. "초 간 무적으로 진행됩니다.")
 	else
 		for i = 1, #players do
-			player:getInventory():clear()
-			players[i]:getPlayer():teleport(newInstance("$.Location", { players[i]:getPlayer():getWorld(), startX, startY, startZ }) )
 			players[i]:setVariable("abilityLock", false)
 		end
 		plugin.getPlugin().gameManager:setVariable("isGodMode", false)
@@ -81,7 +77,7 @@ end
 function teleport()
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
-		player:getInventory():clear()
+		players[i]:getPlayer():getInventory():clear()
 		players[i]:getPlayer():teleport(newInstance("$.Location", { players[i]:getPlayer():getWorld(), startX, startY, startZ }) )
 	end
 end

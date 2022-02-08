@@ -1,7 +1,7 @@
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW038-ability", "PlayerInteractEvent", 4000)
+	plugin.registerEvent(abilityData, "MW038-ability", "PlayerInteractEvent", 2000)
 	plugin.registerEvent(abilityData, "MW038-cancelEffect", "EntityDamageEvent", 0)
 end
 
@@ -80,29 +80,29 @@ function cancelEffect(LAPlayer, event, ability, id)
 end
 
 function createBossbar(player)
-	player:setVariable("MW038-dragonKey", player:getPlayer():getUniqueId():toString() .. "DRAGON")
-	local dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getVariable("MW038-dragonKey") })
-	
-	plugin.getServer():createBossBar(dragonKey, player:getPlayer():getName() .. "(엔더 드래곤)", import("$.boss.BarColor").PURPLE, import("$.boss.BarStyle").SEGMENTED_20, { } )
+	local dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getPlayer():getUniqueId():toString() .. "DRAGON" })
+	local dragonBar = plugin.getServer():createBossBar(dragonKey, player:getPlayer():getName() .. "(엔더 드래곤)", import("$.boss.BarColor").PURPLE, import("$.boss.BarStyle").SEGMENTED_20, { } )
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
-		plugin.getServer():getBossBar(dragonKey):addPlayer(players[i]:getPlayer())
+		dragonBar:addPlayer(players[i]:getPlayer())
 	end
+	
+	player:setVariable("MW038-dragonBar", dragonBar)
 end
 
 function updateBossbar(player)
-	local dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getVariable("MW038-dragonKey") })
-	if plugin.getServer():getBossBar(dragonKey) ~= nil then
+	local dragonBar = player:getVariable("MW038-dragonBar")
+	if dragonBar ~= nil then
 		local health = player:getPlayer():getHealth() / player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getValue()
 		if health > 1 then health = 1 end
-		plugin.getServer():getBossBar(dragonKey):setProgress(health)
+		dragonBar:setProgress(health)
 	end
 end
 
 function removeBossbar(player)
-	local dragonKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getVariable("MW038-dragonKey") })
-	if plugin.getServer():getBossBar(dragonKey) ~= nil then
-		plugin.getServer():getBossBar(dragonKey):setVisible(false)
+	local dragonBar = player:getVariable("MW038-dragonBar")
+	if dragonBar ~= nil then
+		dragonBar:setVisible(false)
 	end
 end
 

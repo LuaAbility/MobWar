@@ -1,7 +1,7 @@
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW039-ability", "PlayerInteractEvent", 3000)
+	plugin.registerEvent(abilityData, "MW039-ability", "PlayerInteractEvent", 1800)
 	plugin.registerEvent(abilityData, "MW039-cancelTarget", "EntityTargetEvent", 0)
 end
 
@@ -90,29 +90,29 @@ function cancelEffect(LAPlayer, event, ability, id)
 end
 
 function createBossbar(player)
-	player:setVariable("MW039-witherKey", player:getPlayer():getUniqueId():toString() .. "wither")
-	local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getVariable("MW039-witherKey") })
-	
-	plugin.getServer():createBossBar(witherKey, player:getPlayer():getName() .. "(위더)", import("$.boss.BarColor").BLUE, import("$.boss.BarStyle").SEGMENTED_20, { } )
+	local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getPlayer():getUniqueId():toString() .. "WITHER" })
+	local witherBar = plugin.getServer():createBossBar(witherKey, player:getPlayer():getName() .. "(위더)", import("$.boss.BarColor").WHITE, import("$.boss.BarStyle").SEGMENTED_20, { } )
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
-		plugin.getServer():getBossBar(witherKey):addPlayer(players[i]:getPlayer())
+		witherBar:addPlayer(players[i]:getPlayer())
 	end
+	
+	player:setVariable("MW039-witherBar", witherBar)
 end
 
 function updateBossbar(player)
-	local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getVariable("MW039-witherKey") })
-	if plugin.getServer():getBossBar(witherKey) ~= nil then
+	local witherBar = player:getVariable("MW039-witherBar")
+	if witherBar ~= nil then
 		local health = player:getPlayer():getHealth() / player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):getValue()
 		if health > 1 then health = 1 end
-		plugin.getServer():getBossBar(witherKey):setProgress(health)
+		witherBar:setProgress(health)
 	end
 end
 
 function removeBossbar(player)
-	local witherKey = newInstance("$.NamespacedKey", {plugin.getPlugin(), player:getVariable("MW039-witherKey") })
-	if plugin.getServer():getBossBar(witherKey) ~= nil then
-		plugin.getServer():getBossBar(witherKey):setVisible(false)
+	local witherBar = player:getVariable("MW039-witherBar")
+	if witherBar ~= nil then
+		witherBar:setVisible(false)
 	end
 end
 

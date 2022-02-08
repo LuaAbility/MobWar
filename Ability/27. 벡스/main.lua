@@ -25,7 +25,7 @@ function onTimer(player, ability)
 end
 
 function Reset(player, ability)
-	if player:getVariable("MW027-useAbility") > 0 then unlockAbility(player) end
+	if player:getVariable("MW027-useAbility") ~= nil and player:getVariable("MW027-useAbility") > 0 then unlockAbility(player) end
 end
 
 function unlockAbility(player)
@@ -63,6 +63,8 @@ function cancelFallDamage(LAPlayer, event, ability, id)
 		end
 	end
 end
+
+
 
 function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then

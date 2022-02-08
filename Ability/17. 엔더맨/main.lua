@@ -1,6 +1,6 @@
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW017-teleport", "PlayerInteractEvent", 600)
-	plugin.registerEvent(abilityData, "MW017-cancelArrow", "EntityDamageEvent", 200)
+	plugin.registerEvent(abilityData, "MW017-cancelArrow", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW017-cancelTarget", "EntityTargetEvent", 0)
 end
 

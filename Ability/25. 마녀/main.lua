@@ -2,7 +2,7 @@ local effect = import("$.potion.PotionEffectType")
 local attribute = import("$.attribute.Attribute")
 	
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW025-heal", "PlayerInteractEvent", 2400)
+	plugin.registerEvent(abilityData, "MW025-heal", "PlayerInteractEvent", 1800)
 	plugin.registerEvent(abilityData, "MW025-harm", "EntityDamageEvent", 500)
 	plugin.registerEvent(abilityData, "MW025-cancelTarget", "EntityTargetEvent", 0)
 end

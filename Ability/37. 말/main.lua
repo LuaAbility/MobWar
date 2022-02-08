@@ -2,7 +2,6 @@ local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW037-changeStat", "PlayerInteractEvent", 2000)
-	plugin.registerEvent(abilityData, "MW037-respawn", "PlayerRespawnEvent", 0)
 end
 
 function onEvent(funcTable)
@@ -14,12 +13,6 @@ function onTimer(player, ability)
 	if player:getVariable("MW037-passiveCount") == nil then 
 		player:setVariable("MW037-passiveCount", 0) 
 		rollStat(player:getPlayer())
-	end
-end
-
-function respawn(LAPlayer, event, ability, id)
-	if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
-		rollStat(event:getPlayer())
 	end
 end
 
@@ -36,7 +29,6 @@ function changeStat(LAPlayer, event, ability, id)
 end
 
 function rollStat(player)
-	
 	local healthStat = util.random(15, 30)
 	local speedStat = util.random(2500, 5000)
 	

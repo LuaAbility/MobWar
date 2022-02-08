@@ -19,6 +19,7 @@ function track(LAPlayer, event, ability, id)
 		
 		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
+			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.DAMAGE_RESISTANCE, 400, 1}))
 			
 			for i = 0, 4 do 
 				util.runLater(function() 

@@ -1,5 +1,5 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW040-changeDifficult", "PlayerInteractEvent", 6000)
+	plugin.registerEvent(abilityData, "MW040-changeDifficult", "PlayerInteractEvent", 2400)
 	plugin.registerEvent(abilityData, "MW040-calculateDamage", "EntityDamageEvent", 0)
 end
 

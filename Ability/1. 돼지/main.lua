@@ -2,7 +2,7 @@ local effect = import("$.potion.PotionEffectType")
 
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW001-panelty", "PlayerItemConsumeEvent", 0)
-	plugin.registerEvent(abilityData, "MW001-speed", "PlayerInteractEvent", 2000)
+	plugin.registerEvent(abilityData, "MW001-speed", "PlayerInteractEvent", 1200)
 	plugin.registerEvent(abilityData, "MW001-changeAbility", "EntityDamageEvent", 0)
 end
 

@@ -9,8 +9,7 @@ function onEvent(funcTable)
 	if funcTable[1] == "MW002-panelty" then panelty(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW002-heal" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
-	
-	
+
 function panelty(LAPlayer, event, ability, id)
 	if event:getItem():getType():toString() == "COOKED_MUTTON" or event:getItem():getType():toString() == "MUTTON" then
 		if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then

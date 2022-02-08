@@ -3,8 +3,8 @@ local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW013-throw", "EntityDamageEvent", 300)
-	plugin.registerEvent(abilityData, "MW013-cancelTarget", "EntityTargetEvent", 0)
 	plugin.registerEvent(abilityData, "MW013-heal", "PlayerInteractEvent", 600)
+	plugin.registerEvent(abilityData, "MW013-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)

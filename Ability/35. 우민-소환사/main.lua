@@ -1,13 +1,11 @@
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW035-shootFang", "PlayerInteractEvent", 500)
 	plugin.registerEvent(abilityData, "MW035-cancelDamage", "EntityDamageEvent", 0)
-	plugin.registerEvent(abilityData, "MW035-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
 	if funcTable[1] == "MW035-shootFang" then shootFang(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW035-cancelDamage" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW035-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function shootFang(LAPlayer, event, ability, id)
@@ -30,18 +28,6 @@ function cancelDamage(LAPlayer, event, ability, id)
 		end
 	end
 end
-
-function cancelTarget(LAPlayer, event, ability, id)
-	if event:getTarget() ~= nil and event:getEntity() ~= nil then
-		if event:getTarget():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "EVOKER" then
-			if game.checkCooldown(LAPlayer, game.getPlayer(event:getTarget()), ability, id) then
-				event:setTarget(nil)
-				event:setCancelled(true)
-			end
-		end
-	end
-end
-
 
 function evoker(player)
 	local firstLoc = newInstance("org.bukkit.util.Vector", {player:getLocation():getX(), player:getLocation():getY(), player:getLocation():getZ()})
