@@ -2,12 +2,12 @@ local effect = import("$.potion.PotionEffectType")
 
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW002-panelty", "PlayerItemConsumeEvent", 0)
-	plugin.registerEvent(abilityData, "MW002-heal", "PlayerInteractEvent", 400)
+	plugin.registerEvent(abilityData, "섭취", "PlayerInteractEvent", 400)
 end
 
 function onEvent(funcTable)
 	if funcTable[1] == "MW002-panelty" then panelty(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW002-heal" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "섭취" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function panelty(LAPlayer, event, ability, id)
