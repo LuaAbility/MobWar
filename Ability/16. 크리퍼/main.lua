@@ -2,14 +2,14 @@ local effect = import("$.potion.PotionEffectType")
 local cause = import("$.event.entity.EntityDamageEvent")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW016-boom", "PlayerInteractEvent", 1200)
+	plugin.registerEvent(abilityData, "자폭", "PlayerInteractEvent", 1200)
 	plugin.registerEvent(abilityData, "MW016-cancelExpDamage", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW016-increaseExp", "EntityDamageEvent", 100)
 	plugin.registerEvent(abilityData, "MW016-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW016-boom" then boom(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "자폭" then boom(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW016-cancelExpDamage" and funcTable[2]:getEventName() == "EntityDamageByBlockEvent" then cancelExpDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW016-increaseExp" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then increaseExp(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW016-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end

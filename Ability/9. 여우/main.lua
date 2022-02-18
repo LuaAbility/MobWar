@@ -1,9 +1,9 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW009-steal", "EntityDamageEvent", 2000)
+	plugin.registerEvent(abilityData, "아이템 뺏기", "EntityDamageEvent", 2000)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW009-steal" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then steal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "아이템 뺏기" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then steal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function steal(LAPlayer, event, ability, id)

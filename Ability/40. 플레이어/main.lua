@@ -1,10 +1,10 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW040-changeDifficult", "PlayerInteractEvent", 2400)
+	plugin.registerEvent(abilityData, "난이도 변경", "PlayerInteractEvent", 2400)
 	plugin.registerEvent(abilityData, "MW040-calculateDamage", "EntityDamageEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW040-changeDifficult" then changeDifficult(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "난이도 변경" then changeDifficult(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW040-calculateDamage" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then calculateDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

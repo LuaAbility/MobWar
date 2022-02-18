@@ -2,7 +2,7 @@ local effect = import("$.potion.PotionEffectType")
 
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW001-panelty", "PlayerItemConsumeEvent", 0)
-	plugin.registerEvent(abilityData, "MW001-speed", "PlayerInteractEvent", 1200)
+	plugin.registerEvent(abilityData, "MW001-speed", "PlayerInteractEvent", 0)
 	plugin.registerEvent(abilityData, "MW001-changeAbility", "EntityDamageEvent", 0)
 end
 
@@ -25,9 +25,8 @@ function speed(LAPlayer, event, ability, id)
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "CARROT_ON_A_STICK") then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
-					event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 800, 0}))
-					event:getPlayer():getWorld():spawnParticle(import("$.Particle").COMPOSTER, event:getPlayer():getLocation():add(0,1,0), 100, 0.5, 0.5, 0.5, 0.2)
-					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_PIG_AMBIENT, 0.25, 1)
+					event:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 100, 0}))
+					event:getPlayer():getWorld():spawnParticle(import("$.Particle").COMPOSTER, event:getPlayer():getLocation():add(0,1,0), 10, 0.5, 0.5, 0.5, 0.2)
 				end
 			end
 		end

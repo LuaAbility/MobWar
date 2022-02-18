@@ -1,10 +1,10 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW035-shootFang", "PlayerInteractEvent", 500)
+	plugin.registerEvent(abilityData, "송곳 소환", "PlayerInteractEvent", 500)
 	plugin.registerEvent(abilityData, "MW035-cancelDamage", "EntityDamageEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW035-shootFang" then shootFang(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "송곳 소환" then shootFang(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW035-cancelDamage" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

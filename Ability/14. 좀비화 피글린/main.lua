@@ -1,12 +1,12 @@
 local effect = import("$.potion.PotionEffectType")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW014-damaged", "EntityDamageEvent", 1200)
+	plugin.registerEvent(abilityData, "분노", "EntityDamageEvent", 1200)
 	plugin.registerEvent(abilityData, "MW014-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW014-damaged" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "분노" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW014-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
@@ -45,7 +45,7 @@ function damaged(LAPlayer, event, ability, id)
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 	
 	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
-		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id, false) then
+		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			damagee:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
 			damagee:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 600, 0}))
 			damagee:getWorld():spawnParticle(import("$.Particle").VILLAGER_ANGRY, damagee:getLocation():add(0,1,0), 20, 0.5, 1, 0.5, 0.05)

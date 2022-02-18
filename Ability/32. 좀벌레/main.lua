@@ -1,10 +1,10 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW031-summonSilverFish", "BlockBreakEvent", 300)
+	plugin.registerEvent(abilityData, "좀벌레 소환", "BlockBreakEvent", 300)
 	plugin.registerEvent(abilityData, "MW031-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW031-summonSilverFish" then summonSilverFish(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "좀벌레 소환" then summonSilverFish(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW031-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

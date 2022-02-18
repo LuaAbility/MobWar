@@ -1,11 +1,11 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW017-teleport", "PlayerInteractEvent", 600)
+	plugin.registerEvent(abilityData, "텔레포트", "PlayerInteractEvent", 600)
 	plugin.registerEvent(abilityData, "MW017-cancelArrow", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW017-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW017-teleport" then teleportAbility(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "텔레포트" then teleportAbility(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW017-cancelArrow" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelArrow(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW017-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end

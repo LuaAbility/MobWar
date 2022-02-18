@@ -2,12 +2,12 @@ local effect = import("$.potion.PotionEffectType")
 
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "MW007-panelty", "PlayerItemConsumeEvent", 0)
-	plugin.registerEvent(abilityData, "MW007-damaged", "EntityDamageEvent", 400)
+	plugin.registerEvent(abilityData, "분노", "EntityDamageEvent", 400)
 end
 
 function onEvent(funcTable)
 	if funcTable[1] == "MW007-panelty" then panelty(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW007-damaged" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "분노" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then damaged(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function panelty(LAPlayer, event, ability, id)

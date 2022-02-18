@@ -1,10 +1,10 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW028-rush", "PlayerInteractEvent", 400)
+	plugin.registerEvent(abilityData, "돌진", "PlayerInteractEvent", 400)
 	plugin.registerEvent(abilityData, "MW028-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW028-rush" then rush(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "돌진" then rush(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW028-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

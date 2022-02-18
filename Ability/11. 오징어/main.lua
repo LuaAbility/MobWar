@@ -1,7 +1,7 @@
 local effect = import("$.potion.PotionEffectType")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW011-blind", "EntityDamageEvent", 100)
+	plugin.registerEvent(abilityData, "MW011-blind", "EntityDamageEvent", 0)
 end
 
 function onEvent(funcTable)

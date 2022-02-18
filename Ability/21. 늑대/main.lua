@@ -1,12 +1,12 @@
 local types = import("$.entity.EntityType")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW021-summonWolf", "EntityDamageEvent", 1200)
+	plugin.registerEvent(abilityData, "친구 소환", "EntityDamageEvent", 1200)
 	plugin.registerEvent(abilityData, "MW021-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW021-summonWolf" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then summonWolf(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "친구 소환" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then summonWolf(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW021-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

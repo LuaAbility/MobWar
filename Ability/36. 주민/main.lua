@@ -1,9 +1,9 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW036-trade", "PlayerInteractEvent", 200)
+	plugin.registerEvent(abilityData, "아이템 거래", "PlayerInteractEvent", 200)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW036-trade" then trade(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "아이템 거래" then trade(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)

@@ -1,10 +1,10 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW033-shareAbility", "EntityDamageEvent", 1800)
+	plugin.registerEvent(abilityData, "능력 공유", "EntityDamageEvent", 1800)
 	plugin.registerEvent(abilityData, "MW033-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW033-shareAbility" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then shareAbility(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "능력 공유" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then shareAbility(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW033-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

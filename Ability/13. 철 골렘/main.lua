@@ -2,15 +2,15 @@ local effect = import("$.potion.PotionEffectType")
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW013-throw", "EntityDamageEvent", 300)
-	plugin.registerEvent(abilityData, "MW013-heal", "PlayerInteractEvent", 600)
+	plugin.registerEvent(abilityData, "던지기", "EntityDamageEvent", 300)
+	plugin.registerEvent(abilityData, "자가 치료", "PlayerInteractEvent", 600)
 	plugin.registerEvent(abilityData, "MW013-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW013-throw" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then throw(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "던지기" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then throw(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW013-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
-	if funcTable[1] == "MW013-heal" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "자가 치료" then heal(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function throw(LAPlayer, event, ability, id)

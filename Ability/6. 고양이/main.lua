@@ -2,11 +2,11 @@ local effect = import("$.potion.PotionEffectType")
 local material = import("$.Material")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW006-getBedItem", "PlayerInteractEvent", 400)
+	plugin.registerEvent(abilityData, "아이템 생성", "PlayerInteractEvent", 400)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW006-getBedItem" then getBedItem(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "아이템 생성" then getBedItem(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 
 function onTimer(player, ability)

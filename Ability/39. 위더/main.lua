@@ -1,12 +1,12 @@
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW039-ability", "PlayerInteractEvent", 1800)
+	plugin.registerEvent(abilityData, "능력 사용", "PlayerInteractEvent", 1800)
 	plugin.registerEvent(abilityData, "MW039-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW039-ability" then ability(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "능력 사용" then ability(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW039-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

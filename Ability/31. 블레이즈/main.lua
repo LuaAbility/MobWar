@@ -1,11 +1,11 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW031-shootFireball", "PlayerInteractEvent", 600)
+	plugin.registerEvent(abilityData, "화염구 발사", "PlayerInteractEvent", 600)
 	plugin.registerEvent(abilityData, "MW031-cancelDamage", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW031-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW031-shootFireball" then shootFireball(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "화염구 발사" then shootFireball(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW031-cancelDamage" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then cancelDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW031-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end

@@ -21,7 +21,7 @@ end
 function heal(LAPlayer, event, ability, id)
 	if event:getAction():toString() == "RIGHT_CLICK_AIR" or event:getAction():toString() == "RIGHT_CLICK_BLOCK" then
 		if event:getItem() ~= nil then
-			if game.isAbilityItem(event:getItem(), "CARROT_ON_A_STICK") then
+			if game.isAbilityItem(event:getItem(), "GRASS") then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					event:setCancelled(true)
 					event:getPlayer():setFoodLevel(event:getPlayer():getFoodLevel() + 4)

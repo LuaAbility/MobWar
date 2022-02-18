@@ -1,11 +1,11 @@
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW037-changeStat", "PlayerInteractEvent", 2000)
+	plugin.registerEvent(abilityData, "스탯 변경", "PlayerInteractEvent", 2000)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW037-changeStat" then changeStat(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "스탯 변경" then changeStat(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW037-respawn" then respawn(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
 

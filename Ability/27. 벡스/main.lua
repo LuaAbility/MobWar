@@ -1,11 +1,11 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW027-fly", "PlayerInteractEvent", 1600)
+	plugin.registerEvent(abilityData, "비행", "PlayerInteractEvent", 1600)
 	plugin.registerEvent(abilityData, "MW027-cancelFallDamage", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW027-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW027-fly" then fly(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "비행" then fly(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW027-cancelFallDamage" then cancelFallDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW027-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
@@ -33,7 +33,7 @@ function unlockAbility(player)
 	local moreDown = player:getPlayer():getLocation():getBlock():getRelative(import("$.block.BlockFace").DOWN):getRelative(import("$.block.BlockFace").DOWN):getType()
 	player:getPlayer():setAllowFlight(false)
 	player:getPlayer():setFlying(false)
-	game.sendMessage(player:getPlayer(), "§2[§a벡스§2] §a능력 시전 시간이 종료되었습니다.")
+	game.sendMessage(player:getPlayer(), "§2[§a벡스§2] §a능력 시전 시간이 종료되었습니다. (비행)")
 	player:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, player:getPlayer():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)
 	player:getPlayer():getWorld():playSound(player:getPlayer():getLocation(), import("$.Sound").ENTITY_VEX_AMBIENT, 0.25, 1)
 	

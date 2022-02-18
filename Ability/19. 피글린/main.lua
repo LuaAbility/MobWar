@@ -3,13 +3,13 @@ local material = import("$.Material")
 local color = import("$.Color")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "MW019-giveItem", "PlayerInteractEvent", 400)
+	plugin.registerEvent(abilityData, "아이템 거래", "PlayerInteractEvent", 400)
 	plugin.registerEvent(abilityData, "MW019-goldDamage", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW019-cancelTarget", "EntityTargetEvent", 0)
 end
 
 function onEvent(funcTable)
-	if funcTable[1] == "MW019-giveItem" then giveItem(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
+	if funcTable[1] == "아이템 거래" then giveItem(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW019-goldDamage" and funcTable[2]:getEventName() == "EntityDamageByEntityEvent" then goldDamage(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 	if funcTable[1] == "MW019-cancelTarget" and funcTable[2]:getEventName() == "EntityTargetLivingEntityEvent" then cancelTarget(funcTable[3], funcTable[2], funcTable[4], funcTable[1]) end
 end
