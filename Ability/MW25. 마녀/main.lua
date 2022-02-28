@@ -3,7 +3,7 @@ local attribute = import("$.attribute.Attribute")
 	
 function Init(abilityData)
 	plugin.registerEvent(abilityData, "회복", "PlayerInteractEvent", 1800)
-	plugin.registerEvent(abilityData, "디버프 부여", "EntityDamageEvent", 500)
+	plugin.registerEvent(abilityData, "디버프 부여", "EntityDamageEvent", 400)
 	plugin.registerEvent(abilityData, "MW025-cancelTarget", "EntityTargetEvent", 0)
 end
 
@@ -46,12 +46,16 @@ function harm(LAPlayer, event, ability, id)
 		local item = { event:getDamager():getInventory():getItemInMainHand() }
 		if game.isAbilityItem(item[1], "GLASS_BOTTLE") then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
-				local randomData = util.random(3)
-				if randomData == 1 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SLOW, 300, 0})) end
-				if randomData == 2 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.POISON, 300, 0})) end
-				if randomData == 3 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.WEAKNESS, 300, 0})) end
-				event:getEntity():getWorld():spawnParticle(import("$.Particle").SPELL_WITCH, event:getEntity():getEyeLocation(), 150, 0.5, 1, 0.5, 0.05)
-				event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").ENTITY_WITCH_CELEBRATE, 0.25, 1)
+				if game.targetPlayer(LAPlayer, game.getPlayer(event:getEntity())) then
+					local randomData = util.random(3)
+					if randomData == 1 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SLOW, 300, 0})) end
+					if randomData == 2 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.POISON, 300, 0})) end
+					if randomData == 3 then event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.WEAKNESS, 300, 0})) end
+					event:getEntity():getWorld():spawnParticle(import("$.Particle").SPELL_WITCH, event:getEntity():getEyeLocation(), 150, 0.5, 1, 0.5, 0.05)
+					event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").ENTITY_WITCH_CELEBRATE, 0.25, 1)
+				else
+					ability:resetCooldown(id)
+				end
 			end
 		end
 	end

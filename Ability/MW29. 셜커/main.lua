@@ -14,7 +14,7 @@ function onTimer(player, ability)
 	if player:getVariable("MW028-passiveCount") == nil then player:setVariable("MW028-passiveCount", 0) end
 	local count = player:getVariable("MW028-passiveCount")
 	Resistance(player)
-	if count >= 600 then 
+	if count >= 200 then 
 		count = 0
 		Shoot(player)
 	end
@@ -54,7 +54,7 @@ end
 function Shoot(player)
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
-		if players[i] ~= player then
+		if players[i] ~= player and game.targetPlayer(player, players[i], false) then
 			if player:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
 			(player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
 				local pos = player:getPlayer():getLocation()

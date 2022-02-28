@@ -11,7 +11,7 @@ end
 function summonSilverFish(player, event, ability, id)
 	local players = util.getTableFromList(game.getPlayers())
 	
-	if event:getPlayer() ~= player:getPlayer() then
+	if event:getPlayer() ~= player:getPlayer() and game.targetPlayer(player, game.getPlayer(event:getPlayer()), false) then
 		if player:getPlayer():getWorld():getEnvironment() == event:getPlayer():getPlayer():getWorld():getEnvironment() and
 		(player:getPlayer():getLocation():distance(event:getPlayer():getLocation()) <= 25) then
 			if util.random(3) == 1 then

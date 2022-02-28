@@ -17,17 +17,20 @@ function throw(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
 		if util.random() <= 0.2 then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
-				event:getEntity():damage(event:getDamage(), event:getDamager())
-				event:setCancelled(true)
-				local vector = event:getDamager():getEyeLocation():getDirection()
-				vector:setX(vector:getX() / 4)
-				vector:setY(1.2)
-				vector:setZ(vector:getZ() / 4)
-				event:getEntity():setVelocity(vector)
-				event:getEntity():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getEntity():getLocation():add(0,1,0), 50, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").IRON_BLOCK}))
-				event:getDamager():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getEntity():getLocation():add(0,1,0), 50, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").IRON_BLOCK}))
-				event:getDamager():getWorld():playSound(event:getDamager():getLocation(), import("$.Sound").ENTITY_IRON_GOLEM_ATTACK, 0.5, 1)
-
+				if game.targetPlayer(LAPlayer, game.getPlayer(event:getEntity())) then
+					event:getEntity():damage(event:getDamage(), event:getDamager())
+					event:setCancelled(true)
+					local vector = event:getDamager():getEyeLocation():getDirection()
+					vector:setX(vector:getX() / 4)
+					vector:setY(1.2)
+					vector:setZ(vector:getZ() / 4)
+					event:getEntity():setVelocity(vector)
+					event:getEntity():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getEntity():getLocation():add(0,1,0), 50, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").IRON_BLOCK}))
+					event:getDamager():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getEntity():getLocation():add(0,1,0), 50, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").IRON_BLOCK}))
+					event:getDamager():getWorld():playSound(event:getDamager():getLocation(), import("$.Sound").ENTITY_IRON_GOLEM_ATTACK, 0.5, 1)
+				else
+					ability:resetCooldown(id)
+				end
 			end
 		end
 	end

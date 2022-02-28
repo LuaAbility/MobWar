@@ -1,5 +1,5 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "비행", "PlayerInteractEvent", 1600)
+	plugin.registerEvent(abilityData, "비행", "PlayerInteractEvent", 1000)
 	plugin.registerEvent(abilityData, "MW027-cancelFallDamage", "EntityDamageEvent", 0)
 	plugin.registerEvent(abilityData, "MW027-cancelTarget", "EntityTargetEvent", 0)
 end

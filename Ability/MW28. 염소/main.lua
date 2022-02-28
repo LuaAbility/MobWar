@@ -1,5 +1,5 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "돌진", "PlayerInteractEvent", 400)
+	plugin.registerEvent(abilityData, "돌진", "PlayerInteractEvent", 200)
 	plugin.registerEvent(abilityData, "MW028-cancelTarget", "EntityTargetEvent", 0)
 end
 

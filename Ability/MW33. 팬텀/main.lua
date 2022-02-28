@@ -35,15 +35,19 @@ function shareAbility(LAPlayer, event, ability, id)
 		local item = { event:getDamager():getInventory():getItemInMainHand() }
 		if game.isAbilityItem(item[1], "IRON_INGOT") then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
-				game.getPlayer(event:getDamager()):setVariable("MW033-targetPlayer", game.getPlayer(event:getEntity()))
-				game.sendMessage(event:getEntity(), "§c팬텀에게 능력이 공유되었습니다. 1분 간 팬텀의 능력에 영향을 받습니다.")
-				event:getEntity():getWorld():spawnParticle(import("$.Particle").REDSTONE, event:getEntity():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))
-				event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").ENTITY_PHANTOM_BITE, 0.25, 1)
-				
-				util.runLater(function() 
-					game.sendMessage(event:getEntity(), "§7팬텀의 능력 공유가 해제되었습니다.")
-					game.getPlayer(event:getDamager()):removeVariable("MW033-targetPlayer")
-				end, 1200)
+				if game.targetPlayer(LAPlayer, game.getPlayer(event:getEntity())) then
+					game.getPlayer(event:getDamager()):setVariable("MW033-targetPlayer", game.getPlayer(event:getEntity()))
+					game.sendMessage(event:getEntity(), "§c팬텀에게 능력이 공유되었습니다. 1분 간 팬텀의 능력에 영향을 받습니다.")
+					event:getEntity():getWorld():spawnParticle(import("$.Particle").REDSTONE, event:getEntity():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05, newInstance("$.Particle$DustOptions", {import("$.Color").RED, 1}))
+					event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").ENTITY_PHANTOM_BITE, 0.25, 1)
+					
+					util.runLater(function() 
+						game.sendMessage(event:getEntity(), "§7팬텀의 능력 공유가 해제되었습니다.")
+						game.getPlayer(event:getDamager()):removeVariable("MW033-targetPlayer")
+					end, 1200)
+				else
+					ability:resetCooldown(id)
+				end
 			end
 		end
 	end

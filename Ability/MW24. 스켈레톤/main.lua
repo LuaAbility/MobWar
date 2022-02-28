@@ -25,7 +25,7 @@ end
 
 function giveWither(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
-		if util.random(10) <= 1 then
+		if util.random(10) <= 3 then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.WITHER, 200, 0}))
 				event:getEntity():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, event:getEntity():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)

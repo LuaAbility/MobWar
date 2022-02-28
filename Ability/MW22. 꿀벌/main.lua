@@ -1,7 +1,7 @@
 local effect = import("$.potion.PotionEffectType")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "독침 쏘기", "EntityDamageEvent", 600)
+	plugin.registerEvent(abilityData, "독침 쏘기", "EntityDamageEvent", 400)
 	plugin.registerEvent(abilityData, "MW022-cancelTarget", "EntityTargetEvent", 0)
 end
 
@@ -26,13 +26,17 @@ function shoot(LAPlayer, event, ability, id)
 		local item = event:getDamager():getInventory():getItemInMainHand()
 		if game.isAbilityItem(item, "IRON_INGOT") then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
-				event:getDamager():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.CONFUSION, 200, 0}))
-				event:getDamager():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.WEAKNESS, 200, 0}))
-				event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.CONFUSION, 200, 0}))
-				event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.POISON, 200, 0}))
-				
-				event:getEntity():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getEntity():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").HONEYCOMB_BLOCK}))
-				event:getDamager():getWorld():playSound(event:getDamager():getLocation(), import("$.Sound").ENTITY_BEE_STING, 1, 1)
+				if game.targetPlayer(LAPlayer, game.getPlayer(event:getEntity())) then
+					event:getDamager():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.CONFUSION, 200, 0}))
+					event:getDamager():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.WEAKNESS, 200, 0}))
+					event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.CONFUSION, 200, 0}))
+					event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.POISON, 200, 0}))
+					
+					event:getEntity():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getEntity():getLocation():add(0,1,0), 100, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").HONEYCOMB_BLOCK}))
+					event:getDamager():getWorld():playSound(event:getDamager():getLocation(), import("$.Sound").ENTITY_BEE_STING, 1, 1)
+				else
+					ability:resetCooldown(id)
+				end
 			end
 		end
 	end

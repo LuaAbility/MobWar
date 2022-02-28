@@ -11,7 +11,7 @@ end
 function onTimer(player, ability)
 	if player:getVariable("MW012-passiveCount") == nil then player:setVariable("MW012-passiveCount", 0) end
 	local count = player:getVariable("MW012-passiveCount")
-	if count >= 100 then 
+	if count >= 200 then 
 		count = 0
 		freeze(player)
 	end
@@ -22,7 +22,7 @@ end
 function freeze(player)
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
-		if players[i] ~= player then
+		if players[i] ~= player and game.targetPlayer(player, players[i], false) then
 			if player:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
 			(player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
 				players[i]:getPlayer():setFreezeTicks(300)

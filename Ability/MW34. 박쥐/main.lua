@@ -16,7 +16,7 @@ function onTimer(player, ability)
 	
 	local count = player:getVariable("MW034-passiveCount")
 
-	if count >= 1800 then count = 0 end
+	if count >= 1200 then count = 0 end
 	if count == 0 then changeType(player) end
 	count = count + 2
 	player:setVariable("MW034-passiveCount", count)

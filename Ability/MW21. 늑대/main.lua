@@ -26,16 +26,20 @@ function summonWolf(LAPlayer, event, ability, id)
 		local item = event:getDamager():getInventory():getItemInMainHand()
 		if game.isAbilityItem(item, "BONE") then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
-				for i = 1, 5 do
-					local entity = event:getDamager():getWorld():spawnEntity(event:getEntity():getLocation(), types.WOLF)
-					entity:setTarget(event:getEntity())
-					util.runLater(function()
-						if entity:isValid() then entity:remove() end
-					end, 600)
+				if game.targetPlayer(LAPlayer, game.getPlayer(event:getEntity())) then
+					for i = 1, 3 do
+						local entity = event:getDamager():getWorld():spawnEntity(event:getEntity():getLocation(), types.WOLF)
+						entity:setTarget(event:getEntity())
+						util.runLater(function()
+							if entity:isValid() then entity:remove() end
+						end, 600)
+					end
+					
+					event:getEntity():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, event:getEntity():getEyeLocation(), 150, 0.5, 1, 0.5, 0.05)
+					event:getDamager():getWorld():playSound(event:getDamager():getLocation(), import("$.Sound").ENTITY_WOLF_HOWL, 1, 1)
+				else
+					ability:resetCooldown(id)
 				end
-				
-				event:getEntity():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, event:getEntity():getEyeLocation(), 150, 0.5, 1, 0.5, 0.05)
-				event:getDamager():getWorld():playSound(event:getDamager():getLocation(), import("$.Sound").ENTITY_WOLF_HOWL, 1, 1)
 			end
 		end
 	end

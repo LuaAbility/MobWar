@@ -21,12 +21,14 @@ function track(LAPlayer, event, ability, id)
 			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
 			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.DAMAGE_RESISTANCE, 400, 1}))
 			
-			for i = 0, 4 do 
-				util.runLater(function() 
-					local vibration = newInstance("$.Vibration", { event:getEntity():getLocation(), newInstance("$.Vibration$Destination$EntityDestination", {damager}), 20})
-					event:getEntity():getWorld():spawnParticle(import("$.Particle").VIBRATION, event:getEntity():getEyeLocation(), 1, 0.5, 1, 0.5, 1, vibration)
-					event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").BLOCK_SCULK_SENSOR_CLICKING, 1, 0.3)
-				end, i * 20)
+			if game.targetPlayer(LAPlayer, game.getPlayer(damager), false) then
+				for i = 0, 4 do 
+					util.runLater(function() 
+						local vibration = newInstance("$.Vibration", { event:getEntity():getLocation(), newInstance("$.Vibration$Destination$EntityDestination", {damager}), 20})
+						event:getEntity():getWorld():spawnParticle(import("$.Particle").VIBRATION, event:getEntity():getEyeLocation(), 1, 0.5, 1, 0.5, 1, vibration)
+						event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").BLOCK_SCULK_SENSOR_CLICKING, 1, 0.3)
+					end, i * 20)
+				end
 			end
 		end
 	end
@@ -34,5 +36,5 @@ end
 
 function addEffect(player)
 	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 40, 0}))
-	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 20, 0}))
+	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 20, 1}))
 end

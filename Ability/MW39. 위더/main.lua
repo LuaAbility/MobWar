@@ -1,7 +1,7 @@
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "능력 사용", "PlayerInteractEvent", 1800)
+	plugin.registerEvent(abilityData, "능력 사용", "PlayerInteractEvent", 600)
 	plugin.registerEvent(abilityData, "MW039-cancelTarget", "EntityTargetEvent", 0)
 end
 
@@ -55,7 +55,7 @@ function ability(LAPlayer, event, ability, id)
 					for i = 1, #players do
 						if players[i]:getPlayer() ~= event:getPlayer() then
 							if event:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
-							(event:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) then
+							(event:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10) and game.targetPlayer(LAPlayer, players[i], false) then
 								local pos = event:getPlayer():getEyeLocation()
 								pos:setY(pos:getY() + 2)
 								

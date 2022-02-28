@@ -1,5 +1,5 @@
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "송곳 소환", "PlayerInteractEvent", 500)
+	plugin.registerEvent(abilityData, "송곳 소환", "PlayerInteractEvent", 200)
 	plugin.registerEvent(abilityData, "MW035-cancelDamage", "EntityDamageEvent", 0)
 end
 
