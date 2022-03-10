@@ -32,7 +32,7 @@ function calculateDamage(LAPlayer, event, ability, id)
 	local damager = event:getDamager()
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 	
-	if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+	if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 		if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then
 			if game.getPlayer(damagee):getVariable("MW040-difficult") == 1 then event:setDamage(event:getDamage() * 0.5)
 			elseif game.getPlayer(damagee):getVariable("MW040-difficult") == 2 then event:setDamage(event:getDamage() * 0.75)

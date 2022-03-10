@@ -37,10 +37,10 @@ function climb(LAPlayer, event, ability, id)
 	
 	local block = checkMat(event:getPlayer():getLocation():getBlock():getRelative(face):getType())
 	local up = checkMat(event:getPlayer():getLocation():add(0, 2, 0):getBlock():getType())
-
-	if block and not up and game.getPlayer(event:getPlayer()):getVariable("MW023-useSpiderAbility") == true then
-		local velocity = event:getPlayer():getVelocity()
-		if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
+	
+	if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
+		if block and not up and game.getPlayer(event:getPlayer()):getVariable("MW023-useSpiderAbility") == true then
+			local velocity = event:getPlayer():getVelocity()
 			if event:getPlayer():isSneaking() then
 				velocity:setY(-0.25)
 				event:getPlayer():setVelocity(velocity)

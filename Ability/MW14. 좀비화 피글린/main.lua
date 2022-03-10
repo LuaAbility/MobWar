@@ -44,7 +44,7 @@ function damaged(LAPlayer, event, ability, id)
 	local damager = event:getDamager()
 	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 	
-	if damagee ~= nil and damager ~= nil then
+	if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") then
 		if damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 				damagee:addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))

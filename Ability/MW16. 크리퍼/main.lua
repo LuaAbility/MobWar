@@ -46,7 +46,7 @@ end
 function increaseExp(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "LIGHTNING" and event:getEntity():getType():toString() == "PLAYER" then
 		if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id, false) then
-			local lightningStack = game.getPlayer(event:getEntity()):getVariable("MW016-lightningStack") + 0.5
+			local lightningStack = game.getPlayer(event:getEntity()):getVariable("MW016-lightningStack") + 0.25
 			
 			if lightningStack > 3 then 
 				lightningStack = 3
@@ -68,7 +68,7 @@ function boom(LAPlayer, event, ability, id)
 			if game.isAbilityItem(event:getItem(), "GUNPOWDER") then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
 					game.getPlayer(event:getPlayer()):setVariable("MW016-playerName", event:getPlayer():getName())
-					event:getPlayer():getLocation():getWorld():createExplosion(event:getPlayer():getLocation(), 10.0 * game.getPlayer(event:getPlayer()):getVariable("MW016-lightningStack"))
+					event:getPlayer():getLocation():getWorld():createExplosion(event:getPlayer():getLocation(), 3.5 * game.getPlayer(event:getPlayer()):getVariable("MW016-lightningStack"))
 					local itemStack = { newInstance("$.inventory.ItemStack", {event:getMaterial(), 1}) }
 					event:getPlayer():getInventory():removeItem(itemStack)
 					event:getPlayer():getWorld():spawnParticle(import("$.Particle").EXPLOSION_HUGE, event:getPlayer():getLocation():add(0,1,0), 10, 4, 1, 4, 0.05)
