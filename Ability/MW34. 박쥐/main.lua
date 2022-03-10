@@ -18,7 +18,7 @@ function onTimer(player, ability)
 		
 		for i = 1, #players do
 			local abilities = util.getTableFromList(game.getPlayerAbility(players[i]))
-			if #abilities > 0 then
+			if #abilities > 0 and not types:contains(abilities[1].abilityType) then
 				types:add(abilities[1].abilityType)
 			end
 		end
