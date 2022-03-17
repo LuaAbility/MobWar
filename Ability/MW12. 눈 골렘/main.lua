@@ -15,8 +15,15 @@ function onTimer(player, ability)
 		count = 0
 		freeze(player)
 	end
-	count = count + 2
+	count = count + 1
 	player:setVariable("MW012-passiveCount", count)
+end
+
+function Reset(player)
+	local players = util.getTableFromList(game.getPlayers())
+	for i = 1, #players do
+		players[i]:getPlayer():setFreezeTicks(0)
+	end
 end
 
 function freeze(player)

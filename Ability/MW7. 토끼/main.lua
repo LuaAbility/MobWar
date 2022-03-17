@@ -23,7 +23,7 @@ function onTimer(player, ability)
 	local count = player:getVariable("MW007-passiveCount")
 	addEffect(player, count)
 	if count >= 600 then count = 0 end
-	count = count + 2
+	count = count + 1
 	player:setVariable("MW007-passiveCount", count)
 end
 

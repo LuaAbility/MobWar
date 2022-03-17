@@ -29,12 +29,12 @@ function changeStat(LAPlayer, event, ability, id)
 end
 
 function rollStat(player)
-	local healthStat = util.random(15, 30)
+	local healthStat = (util.random(1, 75) + 75) / 100.0
 	local speedStat = util.random(2500, 5000)
 	
-	player:getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(healthStat)
+	player:getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(game.getMaxHealth() * healthStat)
 	player:setWalkSpeed(speedStat / 10000.0)
-	game.sendMessage(player, "§2[§a말§2] §a체력 : " .. healthStat .. " / 속도 : " .. speedStat / 10000.0 .. "로 재설정 되었습니다.")
+	game.sendMessage(player, "§2[§a말§2] §a체력 : " .. game.getMaxHealth() * healthStat .. " / 속도 : x" .. (speedStat / 10000.0) / 0.2 .. "로 재설정 되었습니다.")
 	player:getWorld():playSound(player:getLocation(), import("$.Sound").ENTITY_HORSE_AMBIENT, 1, 1)
 end
 

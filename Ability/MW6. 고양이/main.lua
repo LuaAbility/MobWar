@@ -35,25 +35,25 @@ function getBedItem(LAPlayer, event, ability, id)
 					local randomNumber = util.random(100)
 					if randomNumber <= 1 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.ELYTRA, 1})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 10 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.ENDER_PEARL, util.random(10)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 20 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.PHANTOM_MEMBRANE, util.random(5)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 30 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.STRING, util.random(10)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 50 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.WHITE_WOOL, util.random(5)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 70 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.RABBIT, util.random(5)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					else
 						local itemStack = newInstance("$.inventory.ItemStack", {material.CHICKEN, util.random(3)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					end
 					event:getPlayer():getWorld():spawnParticle(import("$.Particle").ITEM_CRACK, event:getPlayer():getLocation():add(0,1,0), 50, 0.5, 1, 0.5, 0.05, newInstance("$.inventory.ItemStack", {import("$.Material").WHITE_WOOL}))
 					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_CAT_AMBIENT, 0.25, 1)

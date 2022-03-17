@@ -17,7 +17,7 @@ function onTimer(player, ability)
 		count = 0
 		addDamage(player)
 	end
-	count = count + 2
+	count = count + 1
 	player:setVariable("MW017-passiveCount", count)
 end
 

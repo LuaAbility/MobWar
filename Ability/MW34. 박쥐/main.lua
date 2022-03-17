@@ -11,7 +11,7 @@ end
 function onTimer(player, ability)
 	if player:getVariable("MW034-passiveCount") == nil then 
 		player:setVariable("MW034-passiveCount", 0) 
-		player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(6)
+		player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(game.getMaxHealth() * 0.3)
 		
 		local types = newInstance("java.util.ArrayList", {})
 		local players = util.getTableFromList(game.getPlayers())
@@ -35,7 +35,7 @@ function onTimer(player, ability)
 
 	if count >= 1200 then count = 0 end
 	if count == 0 then changeType(player) end
-	count = count + 2
+	count = count + 1
 	player:setVariable("MW034-passiveCount", count)
 end
 

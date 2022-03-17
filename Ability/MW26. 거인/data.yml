@@ -3,5 +3,5 @@ type: '몬스터'
 name: '거인'
 rank: 'B'
 description: | 
-    체력이 2배가 됩니다.
+    최대 체력이 2배가 됩니다.
     

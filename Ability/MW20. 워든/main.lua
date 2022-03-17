@@ -18,8 +18,8 @@ function track(LAPlayer, event, ability, id)
 		if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
 		
 		if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
-			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 2}))
-			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.DAMAGE_RESISTANCE, 600, 1}))
+			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
+			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.DAMAGE_RESISTANCE, 600, 0}))
 			
 			if game.targetPlayer(LAPlayer, game.getPlayer(damager), false) then
 				for i = 0, 4 do 
@@ -36,5 +36,5 @@ end
 
 function addEffect(player)
 	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.BLINDNESS, 40, 0}))
-	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 20, 2}))
+	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.INCREASE_DAMAGE, 20, 1}))
 end

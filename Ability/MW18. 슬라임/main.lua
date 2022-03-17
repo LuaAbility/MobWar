@@ -30,7 +30,7 @@ function isDead(LAPlayer, event, ability, id)
 		if event:getEntity():getHealth() - event:getDamage() <= 0 then
 			local maxHealth = event:getEntity():getAttribute(attribute.GENERIC_MAX_HEALTH)
 			if maxHealth:getValue() < 2.0 then
-				maxHealth:setBaseValue(20)
+				maxHealth:setBaseValue(game.getMaxHealth())
 				game.sendMessage(event:getEntity(), "§2[§a슬라임§2] §a원래 체력으로 돌아갑니다.")
 				event:getEntity():getWorld():spawnParticle(import("$.Particle").SLIME, event:getEntity():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)
 				event:getEntity():getWorld():playSound(event:getEntity():getLocation(), import("$.Sound").ENTITY_SLIME_DEATH_SMALL, 0.5, 1)

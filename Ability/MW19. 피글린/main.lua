@@ -49,16 +49,16 @@ function giveItem(LAPlayer, event, ability, id)
 					local randomNumber = util.random(100)
 					if randomNumber <= 1 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.END_CRYSTAL, 1})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 10 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.GOLDEN_SWORD, 1})
 						local itemMeta = itemStack:getItemMeta()
 						itemMeta:setUnbreakable(true)
 						itemStack:setItemMeta(itemMeta)
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 20 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.DIAMOND, util.random(5)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 30 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.POTION, 1})
 						local itemMeta = itemStack:getItemMeta()
@@ -66,18 +66,18 @@ function giveItem(LAPlayer, event, ability, id)
 						itemMeta:setDisplayName("§r§b화염 저항 포션")
 						itemMeta:setColor(color.ORANGE)
 						itemStack:setItemMeta(itemMeta)
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 50 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.ENDER_PEARL, util.random(5)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					elseif randomNumber <= 70 then
 						local itemStack = newInstance("$.inventory.ItemStack", {material.ARROW, util.random(6, 12)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					else
 						local itemStack = newInstance("$.inventory.ItemStack", {material.IRON_INGOT, util.random(3, 15)})
-						event:getPlayer():getWorld():dropItemNaturally(event:getPlayer():getLocation(), itemStack)
+						event:getPlayer():getInventory():addItem( { itemStack } )
 					end
-					event:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, event:getPlayer():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)
+					event:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL,getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)
 					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_PIGLIN_CELEBRATE, 0.5, 1)
 				end
 			end

@@ -17,7 +17,7 @@ function onTimer(player, ability)
 	
 	local count = player:getVariable("MW027-useAbility")
 	if count > 0 then 
-		count = count - 2
+		count = count - 1
 		if count <= 0 then unlockAbility(player) end
 	end
 	player:setVariable("MW027-useAbility", count)
@@ -47,7 +47,7 @@ function fly(LAPlayer, event, ability, id)
 					event:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, event:getPlayer():getLocation():add(0,1,0), 150, 0.5, 1, 0.5, 0.05)
 					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_VEX_CHARGE, 0.25, 1)
 					
-					LAPlayer:setVariable("MW027-useAbility", 600)
+					LAPlayer:setVariable("MW027-useAbility", 200)
 				end
 			end
 		end

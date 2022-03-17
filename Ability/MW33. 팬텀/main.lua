@@ -15,7 +15,7 @@ function onTimer(player, ability)
 		count = 0
 		passiveAbility(player)
 	end
-	count = count + 2
+	count = count + 1
 	player:setVariable("MW033-passiveCount", count)
 end
 
