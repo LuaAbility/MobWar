@@ -52,7 +52,7 @@ function Resistance(player)
 end
 
 function Shoot(player)
-	local players = util.getTableFromList(game.getPlayers())
+	local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(player, false))
 	for i = 1, #players do
 		if players[i] ~= player and game.targetPlayer(player, players[i], false) then
 			if player:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and

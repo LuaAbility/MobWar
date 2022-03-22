@@ -3,9 +3,9 @@ local godModeTick = 6000 -- 무적 시간 (틱)
 
 local infinityFoodLevel = true -- 배고픔 무한 모드 
 local giveItemOnSpawn = true -- 시작 / 스폰 시 기본 아이템 지급
-local startX = 169.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-local startY = 65 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-local startZ = 1323.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startX = 105 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startY = 1 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startZ = 87 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 
 local startBorderSize = 500.0 -- 시작 시 월드 보더의 크기
 local endBorderSize = 20.0 -- 마지막 월드 보더의 크기
@@ -31,6 +31,7 @@ function Init()
 	plugin.cooldownMultiplyOption(1.0) -- 능력 쿨타임 옵션입니다. 해당 값만큼 쿨타임 값에 곱해져 적용됩니다. (예: 0.5일 경우 쿨타임이 기본 쿨타임의 50%, 2.0일 경우 쿨타임이 기본 쿨타임의 200%)
 	plugin.setResourcePackPort(13356)
 	plugin.getPlugin().useResourcePack = true
+	game.setMaxHealth(20)
 	
 	plugin.banAbilityID("LA-SCP-451")
 	plugin.banAbilityID("LA-SCP-___")
@@ -88,7 +89,7 @@ function onTimer()
 	if count == godModeTick then setGodMode(false) end
 	if count == endBorderTick then reductWorldBorder() end
 	bossbar(count)
-	count = count + 2
+	count = count + 1
 	plugin.getPlugin().gameManager:setVariable("gameCount", count)
 end
 
@@ -166,21 +167,21 @@ function eliminate(event)
 	if event:getEntity():getType():toString() == "PLAYER" then
 		local player = game.getPlayer(event:getEntity())
 		if player ~= nil then
-			game.eliminatePlayer(player)
-			event:getEntity():getInventory():clear()
 			event:getEntity():getWorld():strikeLightningEffect(event:getEntity():getLocation())
 			game.broadcastMessage("§4[§cLAbility§4] §c" .. event:getEntity():getName() .. "님이 탈락하셨습니다.")
 			game.sendMessage(event:getEntity(), "§4[§cLAbility§4] §c사망으로 인해 탈락하셨습니다.")
+			game.eliminatePlayer(player)
+		end
+		
+		local damageEvent = event:getEntity():getLastDamageCause()
+	
+		if (damageEvent ~= nil and damageEvent:isCancelled() == false and damageEvent:getEventName() == "EntityDamageByEntityEvent") then
+			local damagee = damageEvent:getEntity()
+			local damager = damageEvent:getDamager()
+			if damageEvent:getCause():toString() == "PROJECTILE" then damager = damageEvent:getDamager():getShooter() end
 			
-			local players = util.getTableFromList(game.getPlayers())
-			if #players == 1 then
-				game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
-				game.broadcastMessage("§6[§eLAbility§6] §e" .. players[1]:getPlayer():getName() .. "님이 우승하셨습니다!")
-				game.endGame()
-			elseif #players < 1 then
-				game.broadcastMessage("§6[§eLAbility§6] §e게임이 종료되었습니다.")
-				game.broadcastMessage("§6[§eLAbility§6] §e우승자가 없습니다.")
-				game.endGame()
+			if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+				damager:getInventory():addItem( { newInstance("$.inventory.ItemStack", {material.GOLDEN_APPLE, 1}) } )
 			end
 		end
 	end
@@ -231,12 +232,13 @@ end
 function Reset()
 	local border = plugin.getPlugin().gameManager:getVariable("worldBorder")
 	if border ~= nil then
-		border:setSize(startBorderSize)
+		border:setSize(9999999)
 		border:setCenter(startX, startZ)
 	end
 
 	local bossbars = util.getTableFromList(plugin.getServer():getBossBars())
 	for i = 1, #bossbars do
+		plugin.getServer():getBossBar(bossbars[i]:getKey()):removeAll()
 		plugin.getServer():getBossBar(bossbars[i]:getKey()):setVisible(false)
 		plugin.getServer():removeBossBar(bossbars[i]:getKey())
 	end

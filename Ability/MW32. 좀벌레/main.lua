@@ -9,7 +9,7 @@ function onEvent(funcTable)
 end
 
 function summonSilverFish(player, event, ability, id)
-	local players = util.getTableFromList(game.getPlayers())
+	local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(player, false))
 	
 	if event:getPlayer() ~= player:getPlayer() and game.targetPlayer(player, game.getPlayer(event:getPlayer()), false) then
 		if player:getPlayer():getWorld():getEnvironment() == event:getPlayer():getPlayer():getWorld():getEnvironment() and

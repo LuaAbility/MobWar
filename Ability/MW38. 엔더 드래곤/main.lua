@@ -23,7 +23,7 @@ function ability(LAPlayer, event, ability, id)
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
-					local players = util.getTableFromList(game.getPlayers())
+					local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(LAPlayer, false))
 					for i = 1, #players do
 						if players[i]:getPlayer() ~= event:getPlayer() then
 							if event:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and

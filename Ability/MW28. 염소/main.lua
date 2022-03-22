@@ -43,7 +43,7 @@ function rush(LAPlayer, event, ability, id)
 end
 
 function rushPassive(player)
-	local players = util.getTableFromList(game.getPlayers())
+	local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(player, false))
 	for i = 1, #players do
 		if players[i]:getPlayer() ~= player:getPlayer() then
 			if player:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and

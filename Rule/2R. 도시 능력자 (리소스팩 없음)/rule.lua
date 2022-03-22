@@ -3,9 +3,9 @@ local godModeTick = 300 -- 무적 시간 (틱)
 
 local infinityFoodLevel = true -- 배고픔 무한 모드 
 local giveItemOnSpawn = true -- 시작 / 스폰 시 기본 아이템 지급
-local startX = 362.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-local startY = 120 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-local startZ = 230.5 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startX = 105 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startY = 1 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startZ = 87 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 
 local startBorderSize = 300.0 -- 시작 시 월드 보더의 크기
 local endBorderSize = 20.0 -- 마지막 월드 보더의 크기
@@ -49,7 +49,7 @@ function Init()
 	plugin.abilityCheckOption(true) -- 능력 확인 옵션입니다. 플레이어가 자신의 능력을 확인할 수 있는 지 정합니다.
 	plugin.cooldownMultiplyOption(1.0) -- 능력 쿨타임 옵션입니다. 해당 값만큼 쿨타임 값에 곱해져 적용됩니다. (예: 0.5일 경우 쿨타임이 기본 쿨타임의 50%, 2.0일 경우 쿨타임이 기본 쿨타임의 200%)
 	plugin.setResourcePackPort(13356)
-	plugin.getPlugin().useResourcePack = true
+	plugin.getPlugin().useResourcePack = false
 	game.setMaxHealth(20)
 	
 	plugin.banAbilityID("LA-SCP-451")

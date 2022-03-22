@@ -14,7 +14,7 @@ function onTimer(player, ability)
 end
 
 function runAway(player)
-	local players = util.getTableFromList(game.getPlayers())
+	local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(player, false))
 	for i = 1, #players do
 		if players[i] ~= player and players[i]:getPlayer():getWorld():getEnvironment() == player:getPlayer():getWorld():getEnvironment() then
 			if player:getPlayer():getLocation():distance(players[i]:getPlayer():getLocation()) <= 10 then
