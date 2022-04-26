@@ -11,7 +11,7 @@ end
 function onTimer(player, ability)
 	if player:getVariable("MW034-passiveCount") == nil then 
 		player:setVariable("MW034-passiveCount", 0) 
-		player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(game.getMaxHealth() * 0.3)
+		player:getPlayer():getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(game.getMaxHealth() * 0.5)
 		
 		local types = newInstance("java.util.ArrayList", {})
 		local players = util.getTableFromList(game.getPlayers())
@@ -24,8 +24,8 @@ function onTimer(player, ability)
 		end
 		
 		if types:size() <= 1 then
-			game.sendMessage(player:getPlayer(), "§4[§c박쥐§4] §c모두가 같은 능력 타입을 가지고 있어, 능력이 제거됩니다.")
-			util.runLater(function() game.removeAbilityAsID(player, "LA-MW-034") end, 1)
+			game.sendMessage(player:getPlayer(), "§4[§c박쥐§4] §c모두가 같은 능력 타입을 가지고 있어 능력이 제거됩니다.")
+			game.removeAbilityAsID(player, "LA-MW-034", false)
 		end
 		
 		player:setVariable("MW034-allTypes", types)
@@ -41,10 +41,10 @@ end
 
 function checkAbility(LAPlayer, event, ability, id)
 	local damagee = event:getEntity()
-	local damager = event:getDamager()
-	if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
+	local damager = util.getRealDamager(event:getDamager())
 	
-	if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" and game.getPlayerAbility(game.getPlayer(damager)) ~= nil then
+	
+	if damager ~= nil and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" and game.getPlayerAbility(game.getPlayer(damager)) ~= nil then
 		local abilities = util.getTableFromList(game.getPlayerAbility(game.getPlayer(damager)))
 		if #abilities > 0 and abilities[1].abilityType == game.getPlayer(damagee):getVariable("MW034-playerType") then
 			if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then

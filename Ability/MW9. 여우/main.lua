@@ -10,7 +10,7 @@ function steal(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
 		
 		local randomData = util.random(100)
-		if randomData <= 15 then
+		if randomData <= 25 then
 			local item = { event:getEntity():getInventory():getItemInMainHand() }
 			if item[1] ~= nil and item[1]:getType():toString() ~= "AIR" then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then

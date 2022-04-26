@@ -21,15 +21,27 @@ function cancelTarget(LAPlayer, event, ability, id)
 	end
 end
 
+function Reset(player, ability)
+	if player:getVariable("MW021-wolf") then
+		for i = 1, #player:getVariable("MW021-wolf") do
+			if player:getVariable("MW021-wolf")[i]:isValid() then player:getVariable("MW021-wolf")[i]:remove() end
+		end
+	end
+end
+
 function summonWolf(LAPlayer, event, ability, id)
 	if event:getDamager():getType():toString() == "PLAYER" and event:getEntity():getType():toString() == "PLAYER" then
 		local item = event:getDamager():getInventory():getItemInMainHand()
 		if game.isAbilityItem(item, "BONE") then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getDamager()), ability, id) then
 				if game.targetPlayer(LAPlayer, game.getPlayer(event:getEntity())) then
+					LAPlayer:setVariable("MW021-wolf", {})
 					for i = 1, 3 do
 						local entity = event:getDamager():getWorld():spawnEntity(event:getEntity():getLocation(), types.WOLF)
 						entity:setTarget(event:getEntity())
+						entity:setOwner(event:getDamager())
+						
+						table.insert(LAPlayer:getVariable("MW021-wolf"), entity)
 						util.runLater(function()
 							if entity:isValid() then entity:remove() end
 						end, 600)

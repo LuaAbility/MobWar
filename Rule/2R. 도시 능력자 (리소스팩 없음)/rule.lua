@@ -1,11 +1,11 @@
 local material = import("$.Material") -- 건들면 안됨!
-local godModeTick = 300 -- 무적 시간 (틱)
+local godModeTick = 600 -- 무적 시간 (틱)
 
 local infinityFoodLevel = true -- 배고픔 무한 모드 
 local giveItemOnSpawn = true -- 시작 / 스폰 시 기본 아이템 지급
-local startX = 105 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-local startY = 1 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
-local startZ = 87 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startX = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startY = 256 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
+local startZ = 0 -- 시작 시 텔레포트 할 좌표 / 월드보더의 기준 좌표
 
 local startBorderSize = 300.0 -- 시작 시 월드 보더의 크기
 local endBorderSize = 20.0 -- 마지막 월드 보더의 크기
@@ -14,17 +14,17 @@ local endBorderTick = 1800 -- 월드보더 크기 축소 시작 시간 (틱)
 	
 local abilityItem = material.IRON_INGOT -- 능력 시전 아이템
 local abilityItemName = "철괴" -- 능력 시전 아이템 이름
-local startExp = 0
+local startExp = 100
 local startItem = {  -- 시작 시 지급 아이템
 	newInstance("$.inventory.ItemStack", {material.WATER_BUCKET, 1}),
 	newInstance("$.inventory.ItemStack", {material.IRON_INGOT, 64}),
 	newInstance("$.inventory.ItemStack", {material.IRON_SWORD, 1}),
 	newInstance("$.inventory.ItemStack", {material.IRON_SWORD, 1}),
 	newInstance("$.inventory.ItemStack", {material.FISHING_ROD, 1}),
-	newInstance("$.inventory.ItemStack", {material.OAK_SIGN, 5}),
-	newInstance("$.inventory.ItemStack", {material.SCAFFOLDING, 20}),
+	newInstance("$.inventory.ItemStack", {material.OAK_SIGN, 10}),
+	newInstance("$.inventory.ItemStack", {material.SCAFFOLDING, 40}),
 	newInstance("$.inventory.ItemStack", {material.BOW, 1}),
-	newInstance("$.inventory.ItemStack", {material.ARROW, 20})
+	newInstance("$.inventory.ItemStack", {material.ARROW, 10})
 }
 
 local startEquip = {  -- 시작 시 지급 아이템
@@ -50,6 +50,9 @@ function Init()
 	plugin.cooldownMultiplyOption(1.0) -- 능력 쿨타임 옵션입니다. 해당 값만큼 쿨타임 값에 곱해져 적용됩니다. (예: 0.5일 경우 쿨타임이 기본 쿨타임의 50%, 2.0일 경우 쿨타임이 기본 쿨타임의 200%)
 	plugin.setResourcePackPort(13356)
 	plugin.getPlugin().useResourcePack = false
+	plugin.getPlugin().burntBlock = false
+	plugin.getPlugin().explodeBlock = false
+	plugin.getPlugin().autoSkipTimer = 30
 	game.setMaxHealth(20)
 	
 	plugin.banAbilityID("LA-SCP-451")
@@ -67,19 +70,20 @@ function Init()
 	plugin.banAbilityID("LA-EX-032")
 	plugin.banAbilityID("LA-EX-028")
 	plugin.banAbilityID("LA-EX-023")
+	plugin.banAbilityID("LA-EX-020")
 	
 	plugin.banAbilityID("LA-EX-003")
-	plugin.banAbilityID("LA-EX-008")
 	plugin.banAbilityID("LA-EX-008")
 	plugin.banAbilityID("LA-HS-003")
 	plugin.banAbilityID("LA-HS-006")
 	plugin.banAbilityID("LA-HS-010")
 	plugin.banAbilityID("LA-HS-012")
+	plugin.banAbilityID("LA-HS-005")
 	
 	-- 임시 밴
 	plugin.banAbilityID("LA-EX-009")
 	plugin.banAbilityID("LA-EX-017")
-	plugin.banAbilityID("LA-EX-043")
+	plugin.banAbilityID("LA-EX-029")
 
 	plugin.registerRuleEvent("PlayerDeathEvent", "eliminate")
 	plugin.registerRuleEvent("EntityDamageEvent", "godMode")
@@ -116,7 +120,8 @@ function cancelCraft(event)
 			block:getType() == material.ENCAHNTING_TABLE or 
 			block:getType() == material.SMOKER or 
 			block:getType() == material.BLAST_FURNACE or 
-			block:getType() == material.SMITHING_TABLE then
+			block:getType() == material.SMITHING_TABLE or
+			block:getType() == material.ANVIL then
 			local player = game.getPlayer(event:getPlayer())
 			if player ~= nil and player.isSurvive then
 				event:setCancelled(true)
@@ -196,6 +201,7 @@ function setGodMode(enable)
 		game.broadcastMessage("§1[§bLAbility§1] §b능력 사용은 " .. abilityItemName .. "(으)로 사용 가능합니다.")
 	end	
 end
+
 function teleport()
 	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
@@ -242,7 +248,7 @@ function reductWorldBorder()
 	if border ~= nil then
 		border:setSize(endBorderSize, borderChangeSecond)
 		border:setDamageAmount(0.01)
-		border:setDamageBuffer(10)
+		border:setDamageBuffer(0)
 		game.broadcastMessage("§4[§cLAbility§4] §c지금부터 월드의 크기가 작아집니다!")
 		game.broadcastMessage("§4[§cLAbility§4] §c크기는 ".. borderChangeSecond .. "초 동안 축소됩니다.")
 		game.broadcastMessage("§4[§cLAbility§4] §c기준 좌표 - X : " .. startX .. " / Z : " .. startZ)
@@ -289,10 +295,10 @@ function eliminate(event)
 	
 		if (damageEvent ~= nil and damageEvent:isCancelled() == false and damageEvent:getEventName() == "EntityDamageByEntityEvent") then
 			local damagee = damageEvent:getEntity()
-			local damager = damageEvent:getDamager()
-			if damageEvent:getCause():toString() == "PROJECTILE" then damager = damageEvent:getDamager():getShooter() end
+			local damager = util.getRealDamager(damageEvent:getDamager())
 			
-			if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+			
+			if damager ~= nil and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 				damager:getInventory():addItem( { newInstance("$.inventory.ItemStack", {material.GOLDEN_APPLE, 1}) } )
 			end
 		end

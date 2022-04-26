@@ -20,7 +20,7 @@ function onTimer(player, ability)
 end
 
 function Reset(player)
-	local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(player, false))
+	local players = util.getTableFromList(game.getPlayers())
 	for i = 1, #players do
 		players[i]:getPlayer():setFreezeTicks(0)
 	end

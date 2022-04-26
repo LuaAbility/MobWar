@@ -21,11 +21,9 @@ end
 function cancelTarget(LAPlayer, event, ability, id)
 	if event:getTarget() ~= nil and event:getEntity() ~= nil then
 		if event:getTarget():getType():toString() == "PLAYER" and string.find(event:getEntity():getType():toString(), "WITHER") then
-			if string.find(event:getEntity():getCustomName(), "위더 스켈레톤") and game.getTeamManager():getMyTeam(LAPlayer:getTeam(), false):contains(game.getPlayer(event:getTarget())) then
-				if game.checkCooldown(LAPlayer, LAPlayer, ability, id) then
-					event:setTarget(nil)
-					event:setCancelled(true)
-				end
+			if string.find(event:getEntity():getCustomName(), "위더 스켈레톤") and game.getTeamManager():getMyTeam(LAPlayer, false):contains(game.getPlayer(event:getTarget())) then
+				event:setTarget(nil)
+				event:setCancelled(true)
 			end
 		end
 	end
@@ -55,7 +53,7 @@ function ability(LAPlayer, event, ability, id)
 		if event:getItem() ~= nil then
 			if game.isAbilityItem(event:getItem(), "IRON_INGOT") then
 				if game.checkCooldown(LAPlayer, game.getPlayer(event:getPlayer()), ability, id) then
-					local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(player, false))
+					local players = util.getTableFromList(game.getTeamManager():getOpponentTeam(LAPlayer, false))
 					for i = 1, #players do
 						if players[i]:getPlayer() ~= event:getPlayer() then
 							if event:getPlayer():getWorld():getEnvironment() == players[i]:getPlayer():getWorld():getEnvironment() and
@@ -71,6 +69,7 @@ function ability(LAPlayer, event, ability, id)
 								
 								local skull = event:getPlayer():getWorld():spawnEntity(pos, import("$.entity.EntityType").WITHER_SKULL)
 								skull:setShooter(event:getPlayer())
+								skull:setCharged(true)
 								util.runLater(function()
 									if skull:isValid() then skull:remove() end
 								end, 100)

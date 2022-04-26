@@ -39,10 +39,10 @@ function infectAbility(LAPlayer, event, ability, id)
 	
 	if (damageEvent ~= nil and damageEvent:isCancelled() == false and damageEvent:getEventName() == "EntityDamageByEntityEvent") then
 		local damagee = damageEvent:getEntity()
-		local damager = damageEvent:getDamager()
-		if damageEvent:getCause():toString() == "PROJECTILE" then damager = damageEvent:getDamager():getShooter() end
+		local damager = util.getRealDamager(damageEvent:getDamager())
 		
-		if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+		
+		if damager ~= nil and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 			if game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 				if game.targetPlayer(LAPlayer, game.getPlayer(damager)) then
 					util.runLater(function() game.changeAbility(game.getPlayer(damager), ability, "LA-MW-015", true) end, 1)

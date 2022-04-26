@@ -1,7 +1,7 @@
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "능력 사용", "PlayerInteractEvent", 1000)
+	plugin.registerEvent(abilityData, "능력 사용", "PlayerInteractEvent", 600)
 	plugin.registerEvent(abilityData, "MW038-cancelEffect", "EntityDamageEvent", 0)
 end
 

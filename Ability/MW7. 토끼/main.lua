@@ -42,10 +42,10 @@ end
 
 function damaged(LAPlayer, event, ability, id)
 	local damagee = event:getEntity()
-	local damager = event:getDamager()
+	local damager = util.getRealDamager(event:getDamager())
 	if event:getCause():toString() == "PROJECTILE" and event:getDamager():getShooter() ~= nil then damager = event:getDamager():getShooter() end
 	
-	if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
+	if damager ~= nil and damager:getType():toString() == "PLAYER" and damagee:getType():toString() == "PLAYER" then
 		if util.random(100) <= 10 and game.getPlayer(damagee):getVariable("MW007-redrum") ~= true then 
 			if game.checkCooldown(LAPlayer, game.getPlayer(damagee), ability, id) then
 				game.getPlayer(damagee):setVariable("MW007-redrum", true)

@@ -14,10 +14,10 @@ end
 
 function track(LAPlayer, event, ability, id)
 	if (event:getCause():toString() == "PROJECTILE" or event:getCause():toString() == "ENTITY_ATTACK") and event:getEntity():getType():toString() == "PLAYER" then
-		local damager = event:getDamager()
-		if event:getCause():toString() == "PROJECTILE" then damager = event:getDamager():getShooter() end
+		local damager = util.getRealDamager(event:getDamager())
 		
-		if not util.hasClass(damager, "org.bukkit.projectiles.BlockProjectileSource") and game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
+		
+		if damager ~= nil and game.checkCooldown(LAPlayer, game.getPlayer(event:getEntity()), ability, id) then
 			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.SPEED, 600, 1}))
 			event:getEntity():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.DAMAGE_RESISTANCE, 600, 0}))
 			

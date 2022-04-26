@@ -1,7 +1,7 @@
 local attribute = import("$.attribute.Attribute")
 
 function Init(abilityData)
-	plugin.registerEvent(abilityData, "스탯 변경", "PlayerInteractEvent", 2000)
+	plugin.registerEvent(abilityData, "스탯 변경", "PlayerInteractEvent", 1200)
 end
 
 function onEvent(funcTable)
@@ -30,7 +30,7 @@ end
 
 function rollStat(player)
 	local healthStat = (util.random(1, 75) + 75) / 100.0
-	local speedStat = util.random(2500, 5000)
+	local speedStat = util.random(2000, 4000)
 	
 	player:getAttribute(attribute.GENERIC_MAX_HEALTH):setBaseValue(game.getMaxHealth() * healthStat)
 	player:setWalkSpeed(speedStat / 10000.0)
