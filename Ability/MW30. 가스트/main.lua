@@ -24,6 +24,7 @@ function shootFireball(LAPlayer, event, ability, id)
 					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_GHAST_SHOOT, 0.25, 1)
 					event:getPlayer():getWorld():playSound(event:getPlayer():getLocation(), import("$.Sound").ENTITY_GHAST_WARN, 0.5, 1)
 					fireball:setShooter(event:getPlayer())
+					fireball:setVelocity(fireball:getVelocity():multiply(4))
 					util.runLater(function()
 						if fireball:isValid() then fireball:remove() end
 					end, 200)

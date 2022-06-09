@@ -15,7 +15,8 @@ end
 
 function addEffect(player)
 	player:getPlayer():addPotionEffect(newInstance("$.potion.PotionEffect", {effect.FIRE_RESISTANCE, 30, 0}))
-	if player:getPlayer():getLocation():getBlock():getType():toString() == "WATER" or player:getPlayer():getLocation():getBlock():getType():toString() == "WATER_CAULDRON" then
+	if player:getPlayer():getLocation():getBlock():getType():toString() == "WATER" or player:getPlayer():getLocation():getBlock():getType():toString() == "WATER_CAULDRON" or
+		player:getPlayer():getLocation():add(0, 1, 0):getBlock():getType():toString() == "WATER" or player:getPlayer():getLocation():add(0, 1, 0):getBlock():getType():toString() == "WATER_CAULDRON"then
 		player:getPlayer():damage(1)
 		player:getPlayer():getWorld():spawnParticle(import("$.Particle").SMOKE_NORMAL, player:getPlayer():getLocation():add(0,1,0), 50, 0.5, 1, 0.5, 0.05)
 		player:getPlayer():getWorld():playSound(player:getPlayer():getLocation(), import("$.Sound").ENTITY_STRIDER_HURT, 0.25, 1)

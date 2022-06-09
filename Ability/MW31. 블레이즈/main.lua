@@ -51,6 +51,7 @@ function fireball(e)
 	pos:setZ(pos:getZ() + (playerEye:getZ() * 1.5))
 	local fireball = e:getPlayer():getWorld():spawnEntity(pos, import("$.entity.EntityType").SMALL_FIREBALL)
 	fireball:setShooter(e:getPlayer())
+	fireball:setVelocity(fireball:getVelocity():multiply(4))
 	e:getPlayer():getWorld():playSound(e:getPlayer():getLocation(), import("$.Sound").ENTITY_BLAZE_SHOOT, 0.25, 1)
 	util.runLater(function() 
 		if fireball:isValid() then fireball:remove() end

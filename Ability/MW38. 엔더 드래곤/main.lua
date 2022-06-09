@@ -61,6 +61,7 @@ function ability(LAPlayer, event, ability, id)
 					pos:setZ(pos:getZ() + (playerEye:getZ() * 1.5))
 					local fireball = event:getPlayer():getWorld():spawnEntity(pos, import("$.entity.EntityType").DRAGON_FIREBALL)
 					fireball:setShooter(event:getPlayer())
+					fireball:setVelocity(fireball:getVelocity():multiply(4))
 					util.runLater(function()
 						if fireball:isValid() then fireball:remove() end
 					end, 100)
